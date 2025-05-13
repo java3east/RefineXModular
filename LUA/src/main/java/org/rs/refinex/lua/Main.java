@@ -2,6 +2,7 @@ package org.rs.refinex.lua;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Language;
+import org.rs.refinex.scripting.Environment;
 
 public class Main extends Language {
     public Main() {
@@ -16,5 +17,10 @@ public class Main extends Language {
     @Override
     public @NotNull String getExtension() {
         return "lua";
+    }
+
+    @Override
+    public @NotNull Environment createEnvironment() {
+        return null;
     }
 }
