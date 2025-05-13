@@ -8,12 +8,12 @@ import org.rs.refinex.context.ContextManager;
  * It tells RefineX how to interact with the context and how to run scripts in that context.
  * This class should be extended by any plugin that wants to add support for a new context.
  *
- * @author Java3east
+ * @author Florian B.
  */
-public abstract class ContextPlugin implements Plugin {
+public abstract class Context implements Plugin {
     private final String contextName;
 
-    public ContextPlugin(final String contextName) {
+    public Context(final String contextName) {
         this.contextName = contextName;
         ContextManager.register(this);
     }

@@ -1,8 +1,8 @@
 package org.rs.refinex.fivem;
 
-import org.rs.refinex.plugin.ContextPlugin;
+import org.rs.refinex.plugin.Context;
 
-public class Main extends ContextPlugin {
+public class Main extends Context {
     public Main() {
         super("FiveM");
     }

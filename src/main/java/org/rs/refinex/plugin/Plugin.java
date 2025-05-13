@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * All types of plugins should implement this interface.
  * RefineX will interact with all plugins through this interface.
  *
- * @author Java3east
+ * @author Florian B.
  */
 public interface Plugin {
     /**

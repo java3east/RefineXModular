@@ -1,9 +1,9 @@
 package org.rs.refinex.lua;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.plugin.LanguagePlugin;
+import org.rs.refinex.plugin.Language;
 
-public class Main extends LanguagePlugin {
+public class Main extends Language {
     public Main() {
         super("LUA");
     }

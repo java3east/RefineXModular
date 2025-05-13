@@ -8,12 +8,12 @@ import org.rs.refinex.language.LanguageManager;
  * It tells RefineX how to interact with the language and how to run scripts in that language.
  * This class should be extended by any plugin that wants to add support for a new language.
  *
- * @author Java3east
+ * @author Florian B.
  */
-public abstract class LanguagePlugin implements Plugin {
+public abstract class Language implements Plugin {
     private final String languageName;
 
-    public LanguagePlugin(final String languageName) {
+    public Language(final String languageName) {
         this.languageName = languageName;
         LanguageManager.register(this);
     }

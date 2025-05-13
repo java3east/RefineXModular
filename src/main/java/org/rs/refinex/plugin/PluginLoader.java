@@ -16,7 +16,7 @@ import java.util.Scanner;
  * a plugin.txt file that specifies the path to the main class of the plugin and a plugin.jar file which
  * contains the compiled plugin code.
  *
- * @author Java3east
+ * @author Florian B.
  */
 public class PluginLoader {
     private static String read(final File file) {
