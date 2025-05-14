@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 
-import java.util.Optional;
-
 /**
  * Simulators represent a container of simulated scripting environments.
  * They can be used to represent a single client or server.

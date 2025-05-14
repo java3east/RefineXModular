@@ -2,6 +2,8 @@ package org.rs.refinex.plugin;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.ContextManager;
+import org.rs.refinex.simulation.Simulation;
+import org.rs.refinex.simulation.Simulator;
 
 /**
  * A context plugin can be used to add support for a new context (game) to RefineX.
@@ -17,6 +19,8 @@ public abstract class Context implements Plugin {
         this.contextName = contextName;
         ContextManager.register(this);
     }
+
+    public abstract @NotNull Simulator createDefaultSimulator(final @NotNull Simulation simulation);
 
     @Override
     public @NotNull String getName() {

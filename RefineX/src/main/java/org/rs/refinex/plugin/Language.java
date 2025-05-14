@@ -3,6 +3,7 @@ package org.rs.refinex.plugin;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.simulation.Simulator;
 
 /**
  * A language plugin can be used to add support for a new scripting language to RefineX.
@@ -29,7 +30,7 @@ public abstract class Language implements Plugin {
      * Creates a new scripting environment for this language.
      * @return the created environment
      */
-    public abstract @NotNull Environment createEnvironment();
+    public abstract @NotNull Environment createEnvironment(final @NotNull Simulator simulator);
 
     @Override
     public @NotNull String getName() {

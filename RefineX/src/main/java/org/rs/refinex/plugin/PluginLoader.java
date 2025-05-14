@@ -37,7 +37,20 @@ public class PluginLoader {
      */
     public static void load(final String name) {
         try {
-            File jarFile = new File("./plugins/" + name + "/plugin.jar");
+            // search for a jar file
+            File dir = new File("./plugins/" + name);
+            File jarFile = null;
+            for (File jar : dir.listFiles()) {
+                if (jar.getName().endsWith(".jar")) {
+                    jarFile = jar;
+                    break;
+                }
+            }
+            if (jarFile == null) {
+                System.out.println("Plugin " + name + " not found");
+                return;
+            }
+
             URL jarUrl = jarFile.toURI().toURL();
             URLClassLoader loader = new URLClassLoader(new URL[]{jarUrl}, RefineX.class.getClassLoader());
 

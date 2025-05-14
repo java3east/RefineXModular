@@ -1,1 +1,1 @@
-org.rs.refinex.lua.Main
+org.rs.refinex.lua.LUA

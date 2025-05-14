@@ -1,1 +1,1 @@
-org.rs.refinex.fivem.Main
+org.rs.refinex.fivem.FiveM

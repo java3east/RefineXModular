@@ -3,9 +3,10 @@ package org.rs.refinex.lua;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.simulation.Simulator;
 
-public class Main extends Language {
-    public Main() {
+public class LUA extends Language {
+    public LUA() {
         super("LUA");
     }
 
@@ -20,7 +21,7 @@ public class Main extends Language {
     }
 
     @Override
-    public @NotNull Environment createEnvironment() {
-        return null;
+    public @NotNull Environment createEnvironment(final @NotNull Simulator simulator) {
+        return new LuaEnvironment(simulator);
     }
 }
