@@ -16,5 +16,25 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>../</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <packageName>org.rs.refinex</packageName>
+                        </manifest>
+                        <manifestEntries>
+                            <Created-By>java3east</Created-By>
+                            <Main-Class>org.rs.refinex.RefineX</Main-Class>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
