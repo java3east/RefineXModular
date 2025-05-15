@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.value.ValueMapper;
 
 /**
  * A language plugin can be used to add support for a new scripting language to RefineX.
@@ -31,6 +32,12 @@ public abstract class Language implements Plugin {
      * @return the created environment
      */
     public abstract @NotNull Environment createEnvironment(final @NotNull Simulator simulator);
+
+    /**
+     * Returns a mapper that can be used to convert types from this language to Java types.
+     * @return the value mapper
+     */
+    public abstract @NotNull ValueMapper<?> getValueMapper();
 
     @Override
     public @NotNull String getName() {

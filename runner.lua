@@ -1,1 +1,1 @@
-print("starting runner")
+print(PARENT_CALL("test", "t", 1, 1.0, true, {x=1}))

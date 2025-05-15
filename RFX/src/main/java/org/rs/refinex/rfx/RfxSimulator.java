@@ -2,6 +2,7 @@ package org.rs.refinex.rfx;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Language;
+import org.rs.refinex.rfx.namespaces.Test;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
@@ -24,6 +25,7 @@ public class RfxSimulator implements Simulator {
     @Override
     public @NotNull Environment createEnvironment(@NotNull String name, @NotNull Language language) {
         Environment environment = language.createEnvironment(this);
+        environment.addNamespace(new Test());
         environments.put(name, environment);
         return environment;
     }

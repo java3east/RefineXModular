@@ -1,8 +1,11 @@
 package org.rs.refinex.simulation;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.context.Namespace;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
+
+import java.util.List;
 
 /**
  * Simulators represent a container of simulated scripting environments.
