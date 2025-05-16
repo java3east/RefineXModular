@@ -20,4 +20,9 @@ public class RFX extends Context {
     public @NotNull Simulator createDefaultSimulator(final @NotNull Simulation simulation) {
         return new RfxSimulator(simulation);
     }
+
+    @Override
+    public @NotNull String manifestName() {
+        return "runner.lua";
+    }
 }

@@ -22,4 +22,9 @@ public class FiveM extends Context {
     public @NotNull Simulator createDefaultSimulator(@NotNull Simulation simulation) {
         return new Fxmanifest(simulation);
     }
+
+    @Override
+    public @NotNull String manifestName() {
+        return "fxmanifest.lua";
+    }
 }

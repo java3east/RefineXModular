@@ -15,6 +15,7 @@ import java.util.List;
 public interface Environment {
     void addNamespace(final @NotNull Namespace namespace);
     void load(final @NotNull String str);
+    void loadfile(final @NotNull String path);
     @NotNull Simulator getSimulator();
     @NotNull List<Namespace> getNamespaces();
 

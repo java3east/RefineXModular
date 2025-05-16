@@ -34,6 +34,11 @@ public class LuaEnvironment implements Environment {
     }
 
     @Override
+    public void loadfile(@NotNull String path) {
+        globals.loadfile(path).call();
+    }
+
+    @Override
     public @NotNull Simulator getSimulator() {
         return this.simulator;
     }

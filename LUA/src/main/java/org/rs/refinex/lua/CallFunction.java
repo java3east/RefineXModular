@@ -36,7 +36,7 @@ class CallFunction extends VarArgFunction {
             args[i] = mapper.map(varargs.arg(i + 1), m.getParameterTypes()[i]);
 
         Object result = invoke(m, args);
-        LuaValue v = mapper.unmap(result);
-        return v;
+        if (result == null) return LuaValue.NIL;
+        return mapper.unmap(result);
     }
 }

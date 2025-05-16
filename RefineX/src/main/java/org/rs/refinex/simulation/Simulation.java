@@ -23,4 +23,8 @@ public class Simulation {
     public @NotNull Simulator defaultSimulator() {
         return context.createDefaultSimulator(this);
     }
+
+    public @NotNull Context getContext() {
+        return context;
+    }
 }

@@ -34,6 +34,8 @@ public abstract class Context implements Plugin {
 
     public abstract @NotNull Simulator createDefaultSimulator(final @NotNull Simulation simulation);
 
+    public abstract @NotNull String manifestName();
+
     public @NotNull Simulator createSimulator(final @NotNull Simulation simulation, final @NotNull String type) {
         SimulatorGenerator generator = generators.get(type);
         if (generator == null)
