@@ -14,9 +14,9 @@ class CallFunction extends VarArgFunction {
         this.environment = environment;
     }
 
-    private Object[] invoke(Method m, Object[] args) {
+    private Object invoke(Method m, Object[] args) {
         try {
-            return (Object[]) m.invoke(null, args);
+            return m.invoke(null, args);
         } catch (Exception e) {
             throw new RuntimeException("Failed to invoke function " + m.getName(), e);
         }
@@ -35,12 +35,8 @@ class CallFunction extends VarArgFunction {
         for (int i = 1; i < m.getParameterCount(); i++)
             args[i] = mapper.map(varargs.arg(i + 1), m.getParameterTypes()[i]);
 
-        Object[] result = invoke(m, args);
-        result = result == null ? new Object[0] : result;
-        LuaValue[] luaValues = new LuaValue[result.length];
-        for (int i = 0; i < result.length; i++)
-            luaValues[i] = mapper.unmap(result[i]);
-
-        return LuaValue.varargsOf(luaValues);
+        Object result = invoke(m, args);
+        LuaValue v = mapper.unmap(result);
+        return v;
     }
 }

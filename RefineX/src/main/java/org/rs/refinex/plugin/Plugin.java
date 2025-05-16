@@ -2,6 +2,8 @@ package org.rs.refinex.plugin;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
 /**
  * All types of plugins should implement this interface.
  * RefineX will interact with all plugins through this interface.
@@ -22,4 +24,12 @@ public interface Plugin {
      * @return The name of the plugin.
      */
     @NotNull String getName();
+
+    /**
+     * Returns the directory of the jar file that contains the plugin.
+     * @return The directory of the jar file that contains the plugin.
+     */
+    default @NotNull File getDirectory() {
+        return new File("./plugins/" + getName() + "/");
+    }
 }

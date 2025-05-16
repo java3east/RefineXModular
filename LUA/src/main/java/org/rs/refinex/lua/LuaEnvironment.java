@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.rs.refinex.context.Namespace;
+import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulator;
 
@@ -19,6 +20,7 @@ public class LuaEnvironment implements Environment {
         this.simulator = simulator;
         this.globals.set("PARENT_EXISTS", new ExistsFunction(this));
         this.globals.set("PARENT_CALL", new CallFunction(this));
+        this.globals.loadfile("./plugins/lua/lib/lib.lua").call();
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.rs.refinex.context.Namespace;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,12 +14,25 @@ import java.util.List;
  *
  * @author Florian B.
  */
-public interface Simulator {
+public abstract class Simulator {
+    private final @NotNull Simulation simulation;
+    private final HashMap<String, Environment> environments = new HashMap<>();
+
+    private long gameTimer = 0;
+
+    public Simulator(final @NotNull Simulation simulation) {
+        this.simulation = simulation;
+    }
+
     /**
      * Returns the simulation this simulator belongs to.
      * @return the simulation
      */
-    @NotNull Simulation getSimulation();
+    public @NotNull Simulation getSimulation() {
+        return this.simulation;
+    }
+
+    protected abstract void addNamespaces(final @NotNull Environment environment);
 
     /**
      * Creates a new environment that should be bound to this simulator.
@@ -28,7 +42,12 @@ public interface Simulator {
      * @param language the language the environment should be created for
      * @return the created environment
      */
-    @NotNull Environment createEnvironment(final @NotNull String name, final @NotNull Language language);
+    public @NotNull Environment createEnvironment(final @NotNull String name, final @NotNull Language language) {
+        Environment environment = language.createEnvironment(this);
+        addNamespaces(environment);
+        environments.put(name, environment);
+        return environment;
+    }
 
     /**
      * Returns an environment with the given name.
@@ -38,5 +57,11 @@ public interface Simulator {
      * @param name the name of the environment to retrieve
      * @return the environment with the given name
      */
-    @NotNull Environment getEnvironment(final @NotNull String name);
+    public @NotNull Environment getEnvironment(final @NotNull String name) {
+        return environments.get(name);
+    }
+
+    public long getGameTimer() {
+        return gameTimer;
+    }
 }

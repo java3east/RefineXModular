@@ -1,19 +1,17 @@
-package org.rs.refinex.rfx;
+package org.rs.refinex.fivem;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.rfx.namespaces.SIMULATION;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
-
-public class RfxSimulator extends Simulator {
-    public RfxSimulator(@NotNull Simulation simulation) {
+public class Client extends Simulator {
+    public Client(@NotNull Simulation simulation) {
         super(simulation);
     }
 
     @Override
     protected void addNamespaces(@NotNull Environment environment) {
-        environment.addNamespace(new SIMULATION());
+
     }
 }

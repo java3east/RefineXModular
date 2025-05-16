@@ -1,36 +1,55 @@
-function tableToString(tbl)
-    local str = "{"
+local function TABLE_STR(t, depth)
+    depth = depth or -1
+    local indent = ""
+    local indentPrev = ""
+    local next = depth
+    local endl = " "
+    if depth > -1 then
+        for i = 1, depth + 1 do
+            indent = indent .. "    "
+        end
+        for i = 1, depth do
+            indentPrev = indentPrev .. "    "
+        end
+        next = depth + 1
+        endl = "\n"
+    end
+
+    local str = "{" .. endl
+
+
     local first = true
-
-    for k, v in pairs(tbl) do
-        if first then
+    for k, v in pairs(t) do
+        if not first then
+            str = str .. "," .. endl
+        else
             first = false
-        else
-            str = str .. ", "
         end
+
+        local key_str;
+        local value_str;
         if type(k) == "string" then
-            str = str .. k .. "="
-        end
-        if type(v) == "table" then
-            str = str .. tableToString(v)
-        elseif type(v) == "string" then
-            str = str .. '"' .. v .. '"'
+            key_str = string.format("%q", k)
+        elseif type(k) == "table" then
+            key_str = TABLE_STR(k, next)
         else
-            str = str .. tostring(v)
+            key_str = tostring(k)
         end
+
+        if type(v) == "string" then
+            value_str = string.format("%q", v)
+        elseif type(v) == "table" then
+            value_str = TABLE_STR(v, next)
+        else
+            value_str = tostring(v)
+        end
+
+        str = str .. indent .. "[" .. key_str .. "] = ".. value_str
     end
 
-    str = str .. "}"
-    return str
+    return str .. endl .. indentPrev .. "}"
 end
 
-function pSub(...)
-    for i, v in ipairs({...}) do
-        if type(v) == "table" then
-            v = tableToString(v)
-        end
-        print(i, v)
-    end
-end
-
-pSub(PARENT_CALL("test", "t", 1, 1.0, true, {{x=1},{x=2},{x=3}}))
+local sim = SIMULATION_CREATE("FiveM")
+local simulator = SIMULATION_CREATE_SIMULATOR(sim, "SERVER")
+print(TABLE_STR(simulator))

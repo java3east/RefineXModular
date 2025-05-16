@@ -8,6 +8,9 @@ import org.rs.refinex.simulation.Simulator;
 public class FiveM extends Context {
     public FiveM() {
         super("FiveM");
+        addGenerator("MANIFEST", Fxmanifest::new);
+        addGenerator("SERVER", Server::new);
+        addGenerator("CLIENT", Client::new);
     }
 
     @Override

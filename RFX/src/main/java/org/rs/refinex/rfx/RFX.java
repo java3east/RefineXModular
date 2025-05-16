@@ -2,14 +2,13 @@ package org.rs.refinex.rfx;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Context;
-import org.rs.refinex.plugin.Language;
-import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
 public class RFX extends Context {
     public RFX() {
         super("RFX");
+        addGenerator("RFX", RfxSimulator::new);
     }
 
     @Override

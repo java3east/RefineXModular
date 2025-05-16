@@ -16,6 +16,10 @@ public class Simulation {
         this.context = context;
     }
 
+    public Simulator createSimulator(final @NotNull String type) {
+        return context.createSimulator(this, type);
+    }
+
     public @NotNull Simulator defaultSimulator() {
         return context.createDefaultSimulator(this);
     }
