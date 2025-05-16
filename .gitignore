@@ -37,3 +37,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/Refx/src/main/java/org/rs/refinex/refx/Main.java
+/plugins/refx/plugin.jar
+/plugins/refx/plugin.txt
+/Refx/pom.xml
+/Refx/src/main/java/org/rs/refinex/refx/RefxSimulator.java
+/runner.lua
