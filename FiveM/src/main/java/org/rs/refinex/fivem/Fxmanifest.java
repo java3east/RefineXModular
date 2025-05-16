@@ -6,7 +6,6 @@ import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
-
 public class Fxmanifest extends Simulator {
     public Fxmanifest(@NotNull Simulation simulation) {
         super(simulation);
