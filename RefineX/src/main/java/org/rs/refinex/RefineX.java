@@ -27,7 +27,7 @@ public class RefineX {
             Scanner scanner = new Scanner(file);
             StringBuilder sb = new StringBuilder();
             while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine());
+                sb.append(scanner.nextLine()).append("\n");
             }
             return sb.toString();
         } catch (FileNotFoundException e) {

@@ -2,6 +2,7 @@ package org.rs.refinex.value;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +71,21 @@ public abstract class ValueMapper<T> {
             return (ObjectMapper<Object>) value -> ValueMapper.this.objMap(ValueMapper.this.getMapMapper().map(value), to);
     }
 
+    private @NotNull Object arrayMap(final @NotNull T[] array, final @NotNull Class<?> clazz) {
+        try {
+            Object instance = Array.newInstance(clazz.getComponentType(), array.length);
+            for (int i = 0; i < array.length; i++) {
+                Object value = array[i];
+                ObjectMapper<?> mapper = getMapper(clazz.getComponentType(), value.getClass(), false);
+                Object mappedValue = mapper.map(value);
+                Array.set(instance, i, mappedValue);
+            }
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ValueMapper(Class<? extends T> clazz) {
         this.clazz = clazz;
         register(Integer.class, clazz, getIntegerMapper());
@@ -84,6 +100,7 @@ public abstract class ValueMapper<T> {
         register(Boolean.class, clazz, getBooleanMapper());
         register(boolean.class, clazz, getBooleanMapper());
         register(Map.class, clazz, getMapMapper());
+        register(Object[].class, clazz, getArrayMapper());
         register(clazz, Integer.class, getIntegerUnmapper());
         register(clazz, int.class, getIntegerUnmapper());
         register(clazz, Long.class, getLongUnmapper());
@@ -96,14 +113,29 @@ public abstract class ValueMapper<T> {
         register(clazz, Boolean.class, getBooleanUnmapper());
         register(clazz, boolean.class, getBooleanUnmapper());
         register(clazz, Map.class, getMapUnmapper());
+        register(clazz, Object[].class, getArrayUnmapper());
     }
 
     public final @NotNull Object map(final @NotNull T object, final @NotNull Class<?> clazz) {
+        if (clazz.isArray()) {
+            T[] array = getArrayMapper().map(object);
+            return arrayMap((T[]) array, clazz);
+        }
         ObjectMapper<?> mapper = getMapper(clazz, object.getClass(), false);
         return mapper.map(object);
     }
 
     public final @NotNull T unmap(final @NotNull Object object) {
+        if (object.getClass().isArray()) {
+            Object[] a = (Object[]) object;
+            T[] array = (T[]) Array.newInstance(clazz, Array.getLength(object));
+            for (int i = 0; i < array.length; i++) {
+                Object value = Array.get(object, i);
+                ObjectMapper<?> mapper = getMapper(clazz, value.getClass(), true);
+                array[i] = (T) mapper.map(value);
+            }
+            return getArrayUnmapper().map(array);
+        }
         ObjectMapper<T> unmapper = (ObjectMapper<T>) getMapper(clazz, object.getClass(), true);
         return unmapper.map(object);
     }
@@ -115,6 +147,7 @@ public abstract class ValueMapper<T> {
     public abstract ObjectMapper<String> getStringMapper();
     public abstract ObjectMapper<Boolean> getBooleanMapper();
     public abstract ObjectMapper<Map<String, T>> getMapMapper();
+    public abstract ObjectMapper<T[]> getArrayMapper();
 
     public abstract ObjectMapper<T> getIntegerUnmapper();
     public abstract ObjectMapper<T> getLongUnmapper();
@@ -123,4 +156,5 @@ public abstract class ValueMapper<T> {
     public abstract ObjectMapper<T> getStringUnmapper();
     public abstract ObjectMapper<T> getBooleanUnmapper();
     public abstract ObjectMapper<T> getMapUnmapper();
+    public abstract ObjectMapper<T> getArrayUnmapper();
 }

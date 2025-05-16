@@ -1,5 +1,6 @@
 package org.rs.refinex.lua;
 
+import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -59,6 +60,19 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
     }
 
     @Override
+    public ObjectMapper<LuaValue[]> getArrayMapper() {
+        return value -> {
+            LuaTable tbl = ((LuaValue) value).checktable();
+            int length = tbl.length();
+            LuaValue[] array = new LuaValue[length];
+            for (int i = 0; i < length; i++) {
+                array[i] = tbl.get(i + 1);
+            }
+            return array;
+        };
+    }
+
+    @Override
     public ObjectMapper<LuaValue> getIntegerUnmapper() {
         return value -> LuaValue.valueOf((Integer) value);
     }
@@ -95,6 +109,18 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
             LuaTable tbl = new LuaTable();
             for (Map.Entry<String, LuaValue> entry : map.entrySet()) {
                 tbl.set(LuaValue.valueOf(entry.getKey()), entry.getValue());
+            }
+            return tbl;
+        };
+    }
+
+    @Override
+    public ObjectMapper<LuaValue> getArrayUnmapper() {
+        return value -> {
+            LuaTable tbl = new LuaTable();
+            LuaValue[] array = (LuaValue[]) value;
+            for (int i = 0; i < array.length; i++) {
+                tbl.set(i + 1, array[i]);
             }
             return tbl;
         };
