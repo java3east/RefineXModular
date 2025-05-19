@@ -7,9 +7,17 @@ import org.rs.refinex.scripting.Environment;
 
 import java.lang.reflect.Method;
 
+/**
+ * CallFunction is a Lua function that allows calling Java methods from Lua.
+ */
 class CallFunction extends VarArgFunction {
     private final Environment environment;
 
+    /**
+     * Creates a new CallFunction instance with the given environment.
+     * The environment will be passed as the first argument to all the java methods.
+     * @param environment the environment to use
+     */
     CallFunction(Environment environment) {
         this.environment = environment;
     }

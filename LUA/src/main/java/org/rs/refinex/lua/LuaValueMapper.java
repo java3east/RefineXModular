@@ -1,6 +1,5 @@
 package org.rs.refinex.lua;
 
-import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -10,6 +9,10 @@ import org.rs.refinex.value.ValueMapper;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A mapper for LuaValue objects, providing methods to convert between LuaValue and other types.
+ * This class extends the ValueMapper class and implements various object mapping methods.
+ */
 public class LuaValueMapper extends ValueMapper<LuaValue> {
     public LuaValueMapper() {
         super(LuaValue.class);

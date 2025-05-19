@@ -4,18 +4,26 @@ import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.rs.refinex.context.Namespace;
-import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Lua environment for the RefineX simulation program.
+ * This class provides an interface to load and execute Lua scripts
+ */
 public class LuaEnvironment implements Environment {
     private final Simulator simulator;
     private final Globals globals = JsePlatform.standardGlobals();
     private final List<Namespace> namespaces = new ArrayList<>();
 
+    /**
+     * Creates a new Lua environment with the given simulator.
+     * This will also add some default functions and libraries to the environment.
+     * @param simulator the simulator this environment is created for
+     */
     public LuaEnvironment(@NotNull Simulator simulator) {
         this.simulator = simulator;
         this.globals.set("PARENT_EXISTS", new ExistsFunction(this));
