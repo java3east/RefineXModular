@@ -6,7 +6,10 @@ import org.rs.refinex.rfx.namespaces.SIMULATION;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 
-
+/**
+ * RFX simulator manifest.
+ * Files of this type is the starting point for simulations.
+ */
 public class RfxSimulator extends Manifest {
     public RfxSimulator(@NotNull Simulation simulation) {
         super(simulation);

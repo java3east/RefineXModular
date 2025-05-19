@@ -10,6 +10,9 @@ import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
+/**
+ * Namespace for simulation-related functions.
+ */
 public class SIMULATION extends Namespace {
     @Native
     public static GUID SIMULATION_CREATE(Environment env, String contextName) {
