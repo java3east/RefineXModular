@@ -3,11 +3,13 @@ package org.rs.refinex.fivem;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.plugin.Context;
+import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
 
 /**
  * Represents the FiveM context for the RefineX simulation program.
  */
+@RefineXPlugin
 public class FiveM extends Context {
     /**
      * Creates a new instance of the FiveM context plugin.

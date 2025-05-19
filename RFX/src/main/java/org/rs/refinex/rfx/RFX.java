@@ -3,12 +3,14 @@ package org.rs.refinex.rfx;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.plugin.Context;
+import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
 
 /**
  * RFX plugin for Refinex.
  * This plugin provides a simulation context for the RFX simulator.
  */
+@RefineXPlugin
 public class RFX extends Context {
     /**
      * Creates a new RFX plugin instance.
