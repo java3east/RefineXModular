@@ -11,4 +11,10 @@ public class MANIFEST extends Namespace {
         Fxmanifest fxmanifest = (Fxmanifest) environment.getSimulator();
         fxmanifest.set("fx_version", version);
     }
+
+    @Native
+    public static void name(Environment environment, String name) {
+        Fxmanifest fxmanifest = (Fxmanifest) environment.getSimulator();
+        fxmanifest.set("name", name);
+    }
 }

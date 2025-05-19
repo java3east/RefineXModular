@@ -2,6 +2,7 @@ package org.rs.refinex.plugin;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.ContextManager;
+import org.rs.refinex.context.Manifest;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.SimulatorGenerator;
@@ -32,7 +33,7 @@ public abstract class Context implements Plugin {
         generators.put(name, generator);
     }
 
-    public abstract @NotNull Simulator createDefaultSimulator(final @NotNull Simulation simulation);
+    public abstract @NotNull Manifest createManifest(final @NotNull Simulation simulation);
 
     public abstract @NotNull String manifestName();
 
