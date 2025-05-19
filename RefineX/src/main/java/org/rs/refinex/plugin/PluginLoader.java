@@ -40,7 +40,7 @@ public class PluginLoader {
             // search for a jar file
             File dir = new File("./plugins/" + name);
             File jarFile = null;
-            for (File jar : dir.listFiles()) {
+            for (File jar : Objects.requireNonNull(dir.listFiles())) {
                 if (jar.getName().endsWith(".jar")) {
                     jarFile = jar;
                     break;

@@ -15,14 +15,28 @@ import java.util.Optional;
 public class LanguageManager {
     private static final HashMap<String, Language> languagePlugins = new HashMap<>();
 
+    /**
+     * Registers a new language plugin.
+     * @param plugin the language plugin to register
+     */
     public static void register(Language plugin) {
         languagePlugins.put(plugin.getName(), plugin);
     }
 
+    /**
+     * Returns the language plugin with the given name.
+     * @param name the name of the language plugin to retrieve
+     * @return the language plugin with the given name
+     */
     public static Language getLanguage(final String name) {
         return languagePlugins.get(name);
     }
 
+    /**
+     * Returns the language plugin with the given extension.
+     * @param extension the extension of the language plugin to retrieve
+     * @return the language plugin with the given extension
+     */
     public static Optional<Language> getByExtension(final String extension) {
         for (Language plugin : languagePlugins.values()) {
             if (plugin.getExtension().equalsIgnoreCase(extension)) {

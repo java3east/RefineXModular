@@ -7,7 +7,6 @@ import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.FileUtils;
 
-import java.util.List;
 import java.util.Optional;
 
 public class Resource {
@@ -36,6 +35,10 @@ public class Resource {
         this.path = path;
     }
 
+    /**
+     * Loads (refreshes) the resource.
+     * This will load the manifest file and validate it.
+     */
     public void load() {
         manifest = simulation.defaultSimulator();
         String extension = FileUtils.getExtension(path + "/" + simulation.getContext().manifestName());
@@ -49,16 +52,33 @@ public class Resource {
         System.out.println("Resource '" + getName() + "' refreshed.");
     }
 
+    /**
+     * Returns the values for the given key in the manifest.
+     * @param key the key to get the values for
+     * @return the values for the given key
+     */
     public String[] get(@NotNull String key) {
         return manifest.get(key);
     }
 
+    /**
+     * Returns the value for the given key at the given index.
+     * @param key the key to get the value for
+     * @param index the index to get the value for
+     * @return the value for the given key at the given index
+     */
     public String get(@NotNull String key, int index) {
         if (index >= manifest.get(key).length)
             return null;
         return manifest.get(key)[index];
     }
 
+    /**
+     * Returns the name of this resource.
+     * If the name is not set in the manifest, the name will be
+     * the last part of the path.
+     * @return the name of this resource
+     */
     public String getName() {
         String name = get("name", 0);
         if (name == null)

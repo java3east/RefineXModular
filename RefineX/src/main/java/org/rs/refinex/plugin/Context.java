@@ -8,7 +8,6 @@ import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.SimulatorGenerator;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 /**
  * A context plugin can be used to add support for a new context (game) to RefineX.

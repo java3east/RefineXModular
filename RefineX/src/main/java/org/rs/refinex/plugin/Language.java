@@ -16,6 +16,10 @@ import org.rs.refinex.value.ValueMapper;
 public abstract class Language implements Plugin {
     private final String languageName;
 
+    /**
+     * Creates a new language plugin with the given name.
+     * @param languageName the name of the language
+     */
     public Language(final String languageName) {
         this.languageName = languageName;
         LanguageManager.register(this);

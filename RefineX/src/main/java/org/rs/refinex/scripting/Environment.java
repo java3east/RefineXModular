@@ -13,12 +13,41 @@ import java.util.List;
  * Each environment is bound to a simulator.
  */
 public interface Environment {
+    /**
+     * Adds the given namespace to the environment.
+     * @param namespace the namespace to add
+     */
     void addNamespace(final @NotNull Namespace namespace);
+
+    /**
+     * Loads the given string into the environment.
+     * @param str the string to load
+     */
     void load(final @NotNull String str);
+
+    /**
+     * Loads the given file into the environment.
+     * @param path the path to the file to load
+     */
     void loadfile(final @NotNull String path);
+
+    /**
+     * Returns the simulator this environment is bound to.
+     * @return the simulator
+     */
     @NotNull Simulator getSimulator();
+
+    /**
+     * Returns the list of namespaces in this environment.
+     * @return the list of namespaces
+     */
     @NotNull List<Namespace> getNamespaces();
 
+    /**
+     * Returns the function with the given name.
+     * @param name the name of the function to get
+     * @return the function with the given name
+     */
     default Method getFunction(final @NotNull String name) {
         for (Namespace namespace : getNamespaces()) {
             if (namespace.hasFunction(name)) return namespace.getFunction(name);
@@ -26,6 +55,11 @@ public interface Environment {
         throw new RuntimeException("No function found for name " + name);
     }
 
+    /**
+     * Checks if the given function exists within this environment.
+     * @param name the name of the function to check
+     * @return true if the function exists, false otherwise
+     */
     default boolean hasFunction(final @NotNull String name) {
         for (Namespace namespace : getNamespaces()) {
             if (namespace.hasFunction(name)) return true;

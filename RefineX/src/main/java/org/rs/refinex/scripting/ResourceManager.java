@@ -22,6 +22,11 @@ public class ResourceManager {
         this.simulation = simulation;
     }
 
+    /**
+     * Loads a resource from the given path.
+     * @param path the path to the resource folder
+     * @return the loaded resource
+     */
     public Resource load(String path) {
         List<String> resourcePaths = List.of(
                 path, FileUtils.currentDirectory().getPath() + path,
@@ -40,6 +45,10 @@ public class ResourceManager {
         throw new RuntimeException("Could not find resource: " + path);
     }
 
+    /**
+     * Returns the resource with the given name.
+     * @return the resource with the given name
+     */
     public Resource get(String name) {
         return resources.get(name);
     }

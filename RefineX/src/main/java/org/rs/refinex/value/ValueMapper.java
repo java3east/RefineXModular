@@ -9,6 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Responsible for mapping objects to a specific type.
+ * @param <T> the type to map to
+ */
 public abstract class ValueMapper<T> {
     private final HashMap<Class<?>, List<Mapping>> mappers = new HashMap<>();
     private final Class<?> clazz;
@@ -86,6 +90,10 @@ public abstract class ValueMapper<T> {
         }
     }
 
+    /**
+     * Creates a new ValueMapper instance.
+     * @param clazz the class to map to
+     */
     public ValueMapper(Class<? extends T> clazz) {
         this.clazz = clazz;
         register(Integer.class, clazz, getIntegerMapper());
@@ -116,6 +124,12 @@ public abstract class ValueMapper<T> {
         register(clazz, Object[].class, getArrayUnmapper());
     }
 
+    /**
+     * Maps the given object to the given class.
+     * @param object the object to map
+     * @param clazz the class to map to
+     * @return the mapped object
+     */
     public final @NotNull Object map(final @NotNull T object, final @NotNull Class<?> clazz) {
         if (clazz.isArray()) {
             T[] array = getArrayMapper().map(object);
@@ -125,6 +139,11 @@ public abstract class ValueMapper<T> {
         return mapper.map(object);
     }
 
+    /**
+     * Maps the given object to the class of this ValueMapper.
+     * @param object the object to map
+     * @return the mapped object
+     */
     public final @NotNull T unmap(final @NotNull Object object) {
         if (object.getClass().isArray()) {
             Object[] a = (Object[]) object;

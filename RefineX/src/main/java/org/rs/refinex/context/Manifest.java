@@ -7,7 +7,15 @@ import org.rs.refinex.simulation.Simulator;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents the manifest of a resource.
+ * A manifest contains metadata about the resource (e.g. name, version, author, server / client scripts, ...)
+ */
 public abstract class Manifest extends Simulator {
+    /**
+     * Creates a new instance of the manifest.
+     * @param simulation the simulation this manifest belongs to
+     */
     public Manifest(@NotNull Simulation simulation) {
         super(simulation);
     }

@@ -2,21 +2,42 @@ package org.rs.refinex.util;
 
 import java.io.File;
 
+/**
+ * Utility class for file operations.
+ */
 public class FileUtils {
+    /**
+     * Returns the current working directory.
+     * @return The current working directory.
+     */
     public static File currentDirectory() {
         return new File(System.getProperty("user.dir"));
     }
 
+    /**
+     * Returns the directory of the jar file that contains this class.
+     * @return The directory of the jar file that contains this class.
+     */
     public static File jarDirectory() {
         String jarPath = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         return new File(jarPath).getParentFile();
     }
 
+    /**
+     * Checks if a file or directory exists at the given path.
+     * @param path The path to check.
+     * @return True if the file or directory exists, false otherwise.
+     */
     public static boolean exists(String path) {
         File file = new File(path);
         return file.exists();
     }
 
+    /**
+     * Returns the extension of a file at the given path.
+     * @param path The path to the file.
+     * @return The extension of the file, or an empty string if there is no extension.
+     */
     public static String getExtension(String path) {
         int lastIndex = path.lastIndexOf('.');
         if (lastIndex == -1) {

@@ -1,12 +1,10 @@
 package org.rs.refinex.simulation;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.context.Namespace;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Simulators represent a container of simulated scripting environments.
@@ -20,6 +18,10 @@ public abstract class Simulator {
 
     private long gameTimer = 0;
 
+    /**
+     * Creates a new simulator for the given simulation.
+     * @param simulation the simulation this simulator will be created for
+     */
     public Simulator(final @NotNull Simulation simulation) {
         this.simulation = simulation;
     }
@@ -32,6 +34,10 @@ public abstract class Simulator {
         return this.simulation;
     }
 
+    /**
+     * Adds the given namespace to the environment.
+     * @param environment the environment to add the namespace to
+     */
     protected abstract void addNamespaces(final @NotNull Environment environment);
 
     /**
@@ -61,6 +67,10 @@ public abstract class Simulator {
         return environments.get(name);
     }
 
+    /**
+     * Returns the current game timer of this simulator.
+     * @return the current game timer
+     */
     public long getGameTimer() {
         return gameTimer;
     }
