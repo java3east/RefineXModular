@@ -5,12 +5,16 @@ import org.rs.refinex.context.Manifest;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.simulation.Simulation;
 
+/**
+ * Represents the FiveM context for the RefineX simulation program.
+ */
 public class FiveM extends Context {
+    /**
+     * Creates a new instance of the FiveM context plugin.
+     */
     public FiveM() {
         super("FiveM");
         addGenerator("MANIFEST", Fxmanifest::new);
-        addGenerator("SERVER", Server::new);
-        addGenerator("CLIENT", Client::new);
     }
 
     @Override

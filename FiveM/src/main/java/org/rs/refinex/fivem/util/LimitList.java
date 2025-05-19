@@ -3,9 +3,19 @@ package org.rs.refinex.fivem.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * A list with a limit on the number of elements it can contain.
+ * This is useful for lists that should not exceed a certain size.
+ * A limit of -1 means no limit.
+ * @param <T>
+ */
 public class LimitList<T> extends ArrayList<T> {
     private final int limit;
 
+    /**
+     * Creates a new LimitList with the given limit.
+     * @param limit the limit of the list, -1 for no limit
+     */
     public LimitList(int limit) {
         this.limit = limit;
     }

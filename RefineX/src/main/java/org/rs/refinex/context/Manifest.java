@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class Manifest extends Simulator {
     public Manifest(@NotNull Simulation simulation) {
         super(simulation);
@@ -23,6 +26,32 @@ public abstract class Manifest extends Simulator {
      * @return the values saved for the given key
      */
     public abstract String[] get(final @NotNull String key);
+
+    /**
+     * Validates the given values
+     *
+     * @throws IllegalStateException if the values are not valid
+     *
+     * @param values the values to validate
+     * @param min the minimum amount of values
+     * @param max the maximum amount of values
+     * @param allowed the allowed values, if empty all values are allowed
+     */
+    protected void validate(@NotNull String[] values, int min, int max, List<String> allowed) {
+        if (values.length < min) {
+            throw new IllegalStateException("Not enough values for " + Arrays.toString(values) + ", expected at least " + min);
+        }
+        if (values.length > max) {
+            throw new IllegalStateException("Too many values for " + Arrays.toString(values) + ", expected at most " + max);
+        }
+        if (!allowed.isEmpty()) {
+            for (String value : values) {
+                if (!allowed.contains(value)) {
+                    throw new IllegalStateException("Invalid value for " + Arrays.toString(values) + ": " + value);
+                }
+            }
+        }
+    }
 
     /**
      * Makes sure the manifest is valid.

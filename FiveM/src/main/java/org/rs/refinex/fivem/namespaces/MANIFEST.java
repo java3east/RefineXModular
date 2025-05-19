@@ -5,6 +5,9 @@ import org.rs.refinex.context.Native;
 import org.rs.refinex.fivem.Fxmanifest;
 import org.rs.refinex.scripting.Environment;
 
+/**
+ * Namespace for the FiveM Fxmanifest.
+ */
 public class MANIFEST extends Namespace {
     @Native
     public static void fx_version(Environment environment, String version) {

@@ -10,24 +10,22 @@ import org.rs.refinex.simulation.Simulation;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Represents the FiveM fxmanifest file.
+ * This class is responsible for managing the fxmanifest data and validating it.
+ */
 public class Fxmanifest extends Manifest {
     private final HashMap<String, List<String>> data = new HashMap<>() {{
         put("fx_version", new LimitList<>(1));
         put("name", new LimitList<>(1));
     }};
 
+    /**
+     * Creates a new Fxmanifest instance for the given simulation.
+     * @param simulation the simulation to create this fxmanifest for
+     */
     public Fxmanifest(@NotNull Simulation simulation) {
         super(simulation);
-    }
-
-    private void validateFxVersion() {
-        List<String> fxVersions = data.get("fx_version");
-        if (fxVersions == null || fxVersions.isEmpty()) {
-            throw new IllegalStateException("fx_version not set");
-        }
-        String fxVersion = fxVersions.getFirst();
-        if (!(fxVersion.equals("cerulean") || fxVersion.equals("adamant") || fxVersion.equals("bodacious") || fxVersion.equals("beyond")))
-            throw new IllegalStateException("Invalid fx version: " + fxVersion);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class Fxmanifest extends Manifest {
 
     @Override
     public void validate() {
-        validateFxVersion();
+        validate(get("fx_version"), 1, 1, List.of("adamant", "cerulean", "bodacious"));
     }
 
     @Override
