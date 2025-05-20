@@ -17,7 +17,39 @@ import java.util.List;
 public class Fxmanifest extends Manifest {
     private final HashMap<String, List<String>> data = new HashMap<>() {{
         put("fx_version", new LimitList<>(1));
-        put("name", new LimitList<>(1));
+        put("game", new LimitList<>(1));
+
+        put("author", new LimitList<>(1));
+        put("description", new LimitList<>(1));
+        put("version", new LimitList<>(1));
+
+        put("client_scripts", new LimitList<>(-1));
+        put("server_scripts", new LimitList<>(-1));
+        put("shared_scripts", new LimitList<>(-1));
+
+        put("files", new LimitList<>(-1));
+        put("ui_page", new LimitList<>(1));
+
+        put("exports", new LimitList<>(-1));
+        put("server_exports", new LimitList<>(-1));
+
+        put("dependencies", new LimitList<>(-1));
+        put("provides", new LimitList<>(-1));
+
+        put("lua54", new LimitList<>(1));
+        put("clr_disable_task_scheduler", new LimitList<>(1));
+        put("use_fxv2_oal", new LimitList<>(1));
+
+        put("escrow_ignore", new LimitList<>(-1));
+        put("encrypted", new LimitList<>(1));
+
+        put("this_is_a_map", new LimitList<>(1));
+        put("map", new LimitList<>(1));
+        put("loadscreen", new LimitList<>(1));
+
+        put("repository", new LimitList<>(1));
+        put("convar_category", new LimitList<>(1));
+        put("before_level_meta", new LimitList<>(1));
     }};
 
     /**
@@ -42,7 +74,15 @@ public class Fxmanifest extends Manifest {
 
     @Override
     public void validate() {
-        validate(get("fx_version"), 1, 1, List.of("adamant", "cerulean", "bodacious"));
+        validate("fx_version", 1, 1, List.of("adamant", "cerulean", "bodacious"));
+        validate("game", 1, -1, List.of("gta5", "rdr3"));
+        validate("lua54", 0, 1, List.of("yes", "no"));
+        validate("clr_disable_task_scheduler", 0, 1, List.of("yes", "no"));
+        validate("use_fxv2_oal", 0, 1, List.of("yes", "no"));
+        validate("this_is_a_map", 0, 1, List.of("yes", "no"));
+        validate("map", 0, 1, List.of("yes", "no"));
+        validate("loadscreen", 0, 1, List.of("yes", "no"));
+        validate("encrypted", 0, 1, List.of("yes", "no"));
     }
 
     @Override
