@@ -24,9 +24,7 @@ public class RFX extends Context {
     }
 
     @Override
-    public void onLoad() {
-        System.out.println("RFX plugin loaded");
-    }
+    public void onLoad() { }
 
     @Override
     public @NotNull Simulation createSimulation() {

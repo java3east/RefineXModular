@@ -28,6 +28,7 @@ public class GUID {
 
     private static long nextGUID = 1;
     private static final HashMap<GUID, Object> guidMap = new HashMap<>();
+    private static final HashMap<Object, GUID> objectMap = new HashMap<>();
 
     /**
      * Registers a new object. This will create a new GUID and associate it with the object.
@@ -35,9 +36,13 @@ public class GUID {
      * @return the GUID associated with the object
      */
     public static GUID register(Object o) {
+        if (objectMap.containsKey(o)) {
+            return objectMap.get(o);
+        }
         GUID guid = new GUID();
         guid.guid = nextGUID++;
         guidMap.put(guid, o);
+        objectMap.put(o, guid);
         return guid;
     }
 

@@ -18,9 +18,7 @@ public class LUA extends Language {
     }
 
     @Override
-    public void onLoad() {
-        System.out.println("Lua plugin loaded");
-    }
+    public void onLoad() { }
 
     @Override
     public @NotNull String getExtension() {

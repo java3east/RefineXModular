@@ -1,12 +1,15 @@
 package org.rs.refinex.fivem;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.fivem.simulation.FiveMSimulatorManager;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.SimulatorManager;
+
+import java.util.logging.Level;
 
 /**
  * Represents the FiveM context for the RefineX simulation program.
@@ -24,9 +27,7 @@ public class FiveM extends Context {
     }
 
     @Override
-    public void onLoad() {
-        System.out.println("FiveM plugin loaded");
-    }
+    public void onLoad() { }
 
     @Override
     public @NotNull Simulation createSimulation() {

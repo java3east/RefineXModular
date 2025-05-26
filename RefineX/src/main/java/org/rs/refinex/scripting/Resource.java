@@ -1,19 +1,20 @@
 package org.rs.refinex.scripting;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.language.LanguageManager;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.Cache;
 import org.rs.refinex.util.FileUtils;
 
 import java.io.File;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class Resource {
         Environment environment = manifest.createEnvironment("manifest", lang);
         environment.loadfile(path + "/" + simulation.getContext().manifestName());
         manifest.validate();
-        System.out.println("Resource '" + getName() + "' refreshed.");
+        RefineX.logger.log(LogType.INFO, "Resource '" + getName() + "' refreshed.", LogSource.here());
     }
 
     /**

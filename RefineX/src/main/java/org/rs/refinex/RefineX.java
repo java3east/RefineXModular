@@ -2,6 +2,10 @@ package org.rs.refinex;
 
 import org.rs.refinex.context.ContextManager;
 import org.rs.refinex.language.LanguageManager;
+import org.rs.refinex.log.LogEntry;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
+import org.rs.refinex.log.Logger;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.plugin.PluginLoader;
@@ -11,6 +15,7 @@ import org.rs.refinex.simulation.Simulator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -22,6 +27,8 @@ import java.util.Scanner;
  * @author Florian B.
  */
 public class RefineX {
+    public static final Logger logger = new Logger();
+
     private static String read(File file) {
         try {
             Scanner scanner = new Scanner(file);
@@ -36,27 +43,27 @@ public class RefineX {
     }
 
     public static void main(String[] args) {
+        logger.log(LogType.INFO, "RefineX starting...", LogSource.here());
         if (args.length != 2) {
-            System.out.println("Usage: refinex <CONTEXT> <RUNNER>");
+            logger.log(LogType.ERROR, "Usage: java -jar RefineX.jar <context_name> <runner_file>", LogSource.here());
             System.exit(1);
         }
 
-        System.out.println(">>> Loading plugins");
-        PluginLoader.loadAll();
-        System.out.println(">>> Plugins loaded");
+        int amount = PluginLoader.loadAll();
+        logger.log(LogType.INFO, "Loaded " + amount + " plugin(s).", LogSource.here());
 
         String contextName = args[0];
         String runnerName = args[1];
 
         Context context = ContextManager.getContext(contextName);
         if (context == null) {
-            System.out.println("Context not found: " + contextName);
+            logger.log(LogType.ERROR, "Context not found: " + contextName, LogSource.here());
             System.exit(1);
         }
 
         File runnerFile = new File(runnerName);
         if (!runnerFile.exists()) {
-            System.out.println("Runner file not found: " + runnerFile.getAbsolutePath());
+            logger.log(LogType.ERROR, "Runner file not found: " + runnerName, LogSource.here());
             System.exit(1);
         }
 
@@ -65,7 +72,7 @@ public class RefineX {
         String fileExtension = runnerFile.getName().substring(runnerFile.getName().lastIndexOf(".") + 1);
         Optional<Language> language = LanguageManager.getByExtension(fileExtension);
         if (language.isEmpty()) {
-            System.out.println("No Language found to handle extension: " + fileExtension);
+            logger.log(LogType.ERROR, "No Language found to handle extension: " + fileExtension, LogSource.here());
             System.exit(1);
         }
         String content = read(runnerFile);

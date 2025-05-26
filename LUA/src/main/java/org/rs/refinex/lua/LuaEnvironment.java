@@ -29,6 +29,7 @@ public class LuaEnvironment implements Environment {
         this.globals.set("PARENT_EXISTS", new ExistsFunction(this));
         this.globals.set("PARENT_CALL", new CallFunction(this));
         this.globals.loadfile("./plugins/lua/lib/lib.lua").call();
+        addNamespace(new LuaNamespace());
     }
 
     @Override

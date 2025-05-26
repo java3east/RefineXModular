@@ -1,6 +1,8 @@
 package org.rs.refinex.plugin;
 
 import org.rs.refinex.RefineX;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +49,7 @@ public class PluginLoader {
                 }
             }
             if (jarFile == null) {
-                System.out.println("Plugin " + name + " not found");
+                RefineX.logger.log(LogType.WARNING, "Plugin " + name + " not found", LogSource.here());
                 return;
             }
 
@@ -71,8 +73,10 @@ public class PluginLoader {
      * Loads all plugins in the ./plugins directory. Each plugin should be in its own directory
      * and should contain a plugin.txt file that specifies the path to the main class of the plugin.
      * The plugin.jar file should be in the same directory as the plugin.txt file.
+     * @return the number of plugins loaded
      */
-    public static void loadAll() {
+    public static int loadAll() {
+        int loaded = 0;
         File pluginsDir = new File("./plugins");
         if (pluginsDir.exists() && pluginsDir.isDirectory()) {
             for (File file : Objects.requireNonNull(pluginsDir.listFiles())) {
@@ -81,13 +85,15 @@ public class PluginLoader {
                     if (pluginTxt.exists()) {
                         String name = file.getName();
                         load(name);
+                        loaded++;
                     } else {
-                        System.out.println("No plugin.txt found in " + file.getAbsolutePath());
+                        RefineX.logger.log(LogType.WARNING, "No plugin.txt found in " + file.getAbsolutePath(), LogSource.here());
                     }
                 }
             }
         } else {
-            System.out.println("Plugins directory does not exist.");
+            RefineX.logger.log(LogType.WARNING, "Plugins directory not found: " + pluginsDir.getAbsolutePath(), LogSource.here());
         }
+        return loaded;
     }
 }

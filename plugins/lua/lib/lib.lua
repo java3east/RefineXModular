@@ -12,3 +12,13 @@ setmetatable(_G, {
         end
     end
 })
+
+function print(...)
+    local args = {...}
+    for i, v in ipairs(args) do
+        if type(v) == "table" then
+            args[i] = table.concat(v, ", ")
+        end
+    end
+    return PARENT_CALL("PRINT", table.unpack(args))
+end
