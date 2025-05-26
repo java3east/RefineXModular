@@ -1,8 +1,10 @@
 package org.rs.refinex.scripting;
 
+import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.FileUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +45,14 @@ public class ResourceManager {
             }
         }
         throw new RuntimeException("Could not find resource: " + path);
+    }
+
+    public @NotNull Resource[] getRunning() {
+        List<Resource> resources = new ArrayList<>();
+        for (Resource r : this.resources.values()) {
+            if (r.isRunning()) resources.add(r);
+        }
+        return resources.toArray(new Resource[0]);
     }
 
     /**

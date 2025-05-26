@@ -5,9 +5,18 @@ import org.rs.refinex.context.Manifest;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulation;
+import org.rs.refinex.util.Cache;
 import org.rs.refinex.util.FileUtils;
 
+import java.io.File;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Resource {
     /**
@@ -25,6 +34,10 @@ public class Resource {
      */
     private Manifest manifest;
 
+    private boolean running = false;
+
+    private final Cache<List<Path>> fileCache = new Cache<>();
+
     /**
      * Creates a new resource for the given simulation and path.
      * @param simulation the simulation this resource will be loaded for
@@ -40,7 +53,7 @@ public class Resource {
      * This will load the manifest file and validate it.
      */
     public void load() {
-        manifest = simulation.defaultSimulator();
+        manifest = simulation.manifest();
         String extension = FileUtils.getExtension(path + "/" + simulation.getContext().manifestName());
         Optional<Language> language = LanguageManager.getByExtension(extension);
         if (language.isEmpty())
@@ -50,6 +63,29 @@ public class Resource {
         environment.loadfile(path + "/" + simulation.getContext().manifestName());
         manifest.validate();
         System.out.println("Resource '" + getName() + "' refreshed.");
+    }
+
+    /**
+     * Starts this resource.
+     */
+    public void start() {
+        this.running = true;
+        this.simulation.startResource(this);
+    }
+
+    /**
+     * Stops this resource.
+     */
+    public void stop() {
+        this.running = false;
+    }
+
+    /**
+     * Checks if this resource is running.
+     * @return true if this resource is running, false otherwise
+     */
+    public boolean isRunning() {
+        return this.running;
     }
 
     /**
@@ -84,5 +120,24 @@ public class Resource {
         if (name == null)
             name = path.substring(path.lastIndexOf("/") + 1);
         return name;
+    }
+
+    private @NotNull List<Path> getFiles() {
+        return fileCache.get("", () ->
+                FileUtils.getFilesRecursive(new File(path))
+        );
+    }
+
+    private @NotNull List<Path> getFiles(final @NotNull PathMatcher matcher) {
+        List<Path> files = getFiles();
+        return files.stream().filter(matcher::matches).collect(Collectors.toList());
+    }
+
+    public @NotNull List<String> getFiles(@NotNull String glob) {
+        glob = new File(this.path).getAbsolutePath() + "/" + glob;
+        @NotNull String finalGlob = glob;
+        return fileCache.get(glob, () ->
+            getFiles(FileSystems.getDefault().getPathMatcher("glob:" + finalGlob))
+        ).stream().map(Path::toString).collect(Collectors.toList());
     }
 }

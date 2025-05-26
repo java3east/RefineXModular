@@ -5,6 +5,7 @@ import org.rs.refinex.context.ContextManager;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.simulation.SimulatorManager;
 import org.rs.refinex.util.SimulatorGenerator;
 
 import java.util.HashMap;
@@ -32,9 +33,13 @@ public abstract class Context implements Plugin {
         generators.put(name, generator);
     }
 
+    public abstract @NotNull Simulation createSimulation();
+
     public abstract @NotNull Manifest createManifest(final @NotNull Simulation simulation);
 
     public abstract @NotNull String manifestName();
+
+    public abstract @NotNull SimulatorManager createSimulatorManager(final @NotNull Simulation simulation);
 
     public @NotNull Simulator createSimulator(final @NotNull Simulation simulation, final @NotNull String type) {
         SimulatorGenerator generator = generators.get(type);

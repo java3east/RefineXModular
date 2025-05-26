@@ -1,6 +1,12 @@
 package org.rs.refinex.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Utility class for file operations.
@@ -44,5 +50,17 @@ public class FileUtils {
             return "";
         }
         return path.substring(lastIndex + 1);
+    }
+
+    public static @NotNull List<Path> getFilesRecursive(final @NotNull File dir) {
+        List<Path> files = new ArrayList<>();
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
+            if (file.isDirectory()) {
+                files.addAll(getFilesRecursive(file));
+            } else {
+                files.add(file.getAbsoluteFile().toPath());
+            }
+        }
+        return files;
     }
 }

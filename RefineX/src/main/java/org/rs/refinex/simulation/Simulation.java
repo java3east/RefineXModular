@@ -14,7 +14,8 @@ import org.rs.refinex.scripting.ResourceManager;
  */
 public class Simulation {
     private final Context context;
-    private final ResourceManager resourceManager = new ResourceManager(this);
+    private final ResourceManager resourceManager;
+    private final SimulatorManager simulatorManager;
 
     /**
      * Creates a new simulation with the given context.
@@ -22,6 +23,20 @@ public class Simulation {
      */
     public Simulation(final @NotNull Context context) {
         this.context = context;
+        this.resourceManager = new ResourceManager(this);
+        this.simulatorManager = context.createSimulatorManager(this);
+    }
+
+    /**
+     * Starts the given resource on all simulators managed by this simulation.
+     * @param resource the resource to start
+     */
+    public void startResource(final @NotNull Resource resource) {
+        simulatorManager.startResource(resource);
+    }
+
+    public @NotNull Resource[] getRunningResources() {
+        return this.resourceManager.getRunning();
     }
 
     /**
@@ -30,7 +45,7 @@ public class Simulation {
      * @return the created simulator
      */
     public Simulator createSimulator(final @NotNull String type) {
-        return context.createSimulator(this, type);
+        return simulatorManager.createSimulator(type);
     }
 
     /**
@@ -38,7 +53,7 @@ public class Simulation {
      * This is usually the manifest simulator.
      * @return the default simulator
      */
-    public @NotNull Manifest defaultSimulator() {
+    public @NotNull Manifest manifest() {
         return context.createManifest(this);
     }
 

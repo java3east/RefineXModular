@@ -16,7 +16,7 @@ public abstract class Manifest extends Simulator {
      * @param simulation the simulation this manifest belongs to
      */
     public Manifest(@NotNull Simulation simulation) {
-        super(simulation);
+        super(simulation, "MANIFEST");
     }
 
     /**

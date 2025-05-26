@@ -2,9 +2,11 @@ package org.rs.refinex.fivem;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.Manifest;
+import org.rs.refinex.fivem.simulation.FiveMSimulatorManager;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
+import org.rs.refinex.simulation.SimulatorManager;
 
 /**
  * Represents the FiveM context for the RefineX simulation program.
@@ -17,11 +19,19 @@ public class FiveM extends Context {
     public FiveM() {
         super("FiveM");
         addGenerator("MANIFEST", Fxmanifest::new);
+        addGenerator("SERVER", ServerSimulator::new);
     }
 
     @Override
     public void onLoad() {
         System.out.println("FiveM plugin loaded");
+    }
+
+    @Override
+    public @NotNull Simulation createSimulation() {
+        Simulation simulation = new Simulation(this);
+        simulation.createSimulator("SERVER");
+        return simulation;
     }
 
     @Override
@@ -32,5 +42,10 @@ public class FiveM extends Context {
     @Override
     public @NotNull String manifestName() {
         return "fxmanifest.lua";
+    }
+
+    @Override
+    public @NotNull SimulatorManager createSimulatorManager(final @NotNull Simulation simulation) {
+        return new FiveMSimulatorManager(simulation);
     }
 }

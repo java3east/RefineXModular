@@ -1,8 +1,10 @@
-package org.rs.refinex.rfx;
+package org.rs.refinex.rfx.simulation;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.Manifest;
+import org.rs.refinex.rfx.namespaces.RESOURCE;
 import org.rs.refinex.rfx.namespaces.SIMULATION;
+import org.rs.refinex.rfx.namespaces.SIMULATOR;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulation;
 
@@ -29,5 +31,7 @@ public class RfxSimulator extends Manifest {
     @Override
     protected void addNamespaces(@NotNull Environment environment) {
         environment.addNamespace(new SIMULATION());
+        environment.addNamespace(new SIMULATOR());
+        environment.addNamespace(new RESOURCE());
     }
 }

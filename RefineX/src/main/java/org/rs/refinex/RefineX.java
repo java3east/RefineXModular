@@ -69,7 +69,7 @@ public class RefineX {
             System.exit(1);
         }
         String content = read(runnerFile);
-        Simulator simulator = simulation.defaultSimulator();
+        Simulator simulator = simulation.manifest();
         Environment env = simulator.createEnvironment("runner", language.get());
         env.load(content);
     }

@@ -17,21 +17,7 @@ public class SIMULATION extends Namespace {
     @Native
     public static GUID SIMULATION_CREATE(Environment env, String contextName) {
         Context context = ContextManager.getContext(contextName);
-        Simulation simulation = new Simulation(context);
+        Simulation simulation = context.createSimulation();
         return GUID.register(simulation);
-    }
-
-    @Native
-    public static GUID SIMULATION_CREATE_SIMULATOR(Environment env, GUID simulation, String simulatorType) {
-        Simulation sim = (Simulation) GUID.get(simulation, Simulation.class);
-        Simulator simulator = sim.createSimulator(simulatorType);
-        return GUID.register(simulator);
-    }
-
-    @Native
-    public static GUID SIMULATION_LOAD_RESOURCE(Environment env, GUID simulation, String path) {
-        Simulation sim = (Simulation) GUID.get(simulation, Simulation.class);
-        Resource resource = sim.load(path);
-        return GUID.register(resource);
     }
 }

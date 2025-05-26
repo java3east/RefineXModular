@@ -13,6 +13,7 @@ import java.util.HashMap;
  * @author Florian B.
  */
 public abstract class Simulator {
+    private final @NotNull String type;
     private final @NotNull Simulation simulation;
     private final HashMap<String, Environment> environments = new HashMap<>();
 
@@ -22,8 +23,13 @@ public abstract class Simulator {
      * Creates a new simulator for the given simulation.
      * @param simulation the simulation this simulator will be created for
      */
-    public Simulator(final @NotNull Simulation simulation) {
+    public Simulator(final @NotNull Simulation simulation, final @NotNull String type) {
         this.simulation = simulation;
+        this.type = type;
+    }
+
+    public @NotNull String getType() {
+        return type;
     }
 
     /**
