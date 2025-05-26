@@ -20,6 +20,7 @@ public class FiveM extends Context {
         super("FiveM");
         addGenerator("MANIFEST", Fxmanifest::new);
         addGenerator("SERVER", ServerSimulator::new);
+        addGenerator("CLIENT", ClientSimulator::new);
     }
 
     @Override
