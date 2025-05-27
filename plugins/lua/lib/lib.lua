@@ -14,11 +14,12 @@ setmetatable(_G, {
 })
 
 function print(...)
+    local file, line = debug.getinfo(2, "Sl").short_src, debug.getinfo(2, "l").currentline
+
+    local str = ""
     local args = {...}
     for i, v in ipairs(args) do
-        if type(v) == "table" then
-            args[i] = table.concat(v, ", ")
-        end
+        str = str .. tostring(v) .. "    "
     end
-    return PARENT_CALL("PRINT", table.unpack(args))
+    return PARENT_CALL("PRINT", str, file, line)
 end

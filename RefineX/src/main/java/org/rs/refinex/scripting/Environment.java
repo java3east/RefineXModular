@@ -44,6 +44,12 @@ public interface Environment {
     @NotNull List<Namespace> getNamespaces();
 
     /**
+     * Returns the path to the resource this environment is associated with.
+     * @return the resource path
+     */
+    @NotNull String getResourcePath();
+
+    /**
      * Returns the function with the given name.
      * @param name the name of the function to get
      * @return the function with the given name

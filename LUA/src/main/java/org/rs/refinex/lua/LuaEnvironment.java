@@ -6,6 +6,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.util.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class LuaEnvironment implements Environment {
     private final Simulator simulator;
-    private final Globals globals = JsePlatform.standardGlobals();
+    private final Globals globals = JsePlatform.debugGlobals();
     private final List<Namespace> namespaces = new ArrayList<>();
 
     /**
@@ -55,5 +56,10 @@ public class LuaEnvironment implements Environment {
     @Override
     public @NotNull List<Namespace> getNamespaces() {
         return namespaces.stream().toList();
+    }
+
+    @Override
+    public @NotNull String getResourcePath() {
+        return FileUtils.currentDirectory().getAbsolutePath() + "/./resources/";
     }
 }
