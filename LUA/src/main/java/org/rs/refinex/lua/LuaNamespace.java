@@ -12,7 +12,7 @@ public class LuaNamespace extends Namespace {
     @Native
     public static void PRINT(Environment environment, String message, String file, int line) {
         RefineX.logger.log(LogType.DEBUG, LogColor.WHITE + "[" + LogColor.RESET +
-                        environment.getSimulator().getName() + LogColor.WHITE + "] " + LogColor.RESET + message,
+                        environment.getSimulator().getName() + LogColor.WHITE + "] " + LogColor.RESET + message.trim(),
                 new LogSource(file.replace(environment.getResourcePath(), ""), line)
         );
     }
