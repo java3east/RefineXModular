@@ -34,4 +34,9 @@ public class RfxSimulator extends Manifest {
         environment.addNamespace(new SIMULATOR());
         environment.addNamespace(new RESOURCE());
     }
+
+    @Override
+    public @NotNull String getName() {
+        return "RFXRunner";
+    }
 }

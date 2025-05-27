@@ -47,6 +47,12 @@ public abstract class Simulator {
     protected abstract void addNamespaces(final @NotNull Environment environment);
 
     /**
+     * Returns the name of this simulator
+     * @return the name of this simulator
+     */
+    public abstract @NotNull String getName();
+
+    /**
      * Creates a new environment that should be bound to this simulator.
      * This will also register the environment in this simulator, so it can be
      * retrieved later with {@link #getEnvironment(String)}

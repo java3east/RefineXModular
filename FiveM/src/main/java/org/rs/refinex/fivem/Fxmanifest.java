@@ -89,4 +89,9 @@ public class Fxmanifest extends Manifest {
     protected void addNamespaces(@NotNull Environment environment) {
         environment.addNamespace(new MANIFEST());
     }
+
+    @Override
+    public @NotNull String getName() {
+        return "FIVEM:MANIFEST";
+    }
 }

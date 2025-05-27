@@ -19,4 +19,9 @@ public class ServerSimulator extends Simulator {
     protected void addNamespaces(@NotNull Environment environment) {
 
     }
+
+    @Override
+    public @NotNull String getName() {
+        return "SERVER";
+    }
 }
