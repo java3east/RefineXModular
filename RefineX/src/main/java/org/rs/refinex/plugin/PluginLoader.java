@@ -65,7 +65,7 @@ public class PluginLoader {
             Plugin plugin = (Plugin) loadedClass.getDeclaredConstructor().newInstance();
             method.invoke(plugin);
         } catch(Exception e) {
-            throw new RuntimeException(e);
+            RefineX.logger.log(LogType.ERROR, "Failed to load plugin " + name + ": " + e.getMessage(), LogSource.here());
         }
     }
 

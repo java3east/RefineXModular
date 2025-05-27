@@ -1,6 +1,9 @@
 package org.rs.refinex.value;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Responsible for mapping objects to a specific type.
@@ -86,7 +90,7 @@ public abstract class ValueMapper<T> {
             }
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while instantiating " + clazz.getName() + ": " + e.getMessage(), e);
         }
     }
 

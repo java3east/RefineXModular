@@ -6,9 +6,7 @@ import org.rs.refinex.context.Native;
 import org.rs.refinex.guid.GUID;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.scripting.Environment;
-import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
-import org.rs.refinex.simulation.Simulator;
 
 /**
  * Namespace for simulation-related functions.

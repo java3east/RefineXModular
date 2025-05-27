@@ -63,7 +63,6 @@ public class Resource {
         Environment environment = manifest.createEnvironment("manifest", lang);
         environment.loadfile(path + "/" + simulation.getContext().manifestName());
         manifest.validate();
-        RefineX.logger.log(LogType.INFO, "Resource '" + getName() + "' refreshed.", LogSource.here());
     }
 
     /**

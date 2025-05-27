@@ -38,7 +38,11 @@ public class RefineX {
             }
             return sb.toString();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            logger.log(LogType.ERROR, "File not found: " + file.getAbsolutePath(), LogSource.here());
+            return "";
+        } catch (Exception e) {
+            logger.log(LogType.ERROR, "Error reading file: " + file.getAbsolutePath() + " - " + e.getMessage(), LogSource.here());
+            return "";
         }
     }
 
