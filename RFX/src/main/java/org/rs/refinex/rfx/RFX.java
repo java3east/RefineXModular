@@ -6,9 +6,7 @@ import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.rfx.simulation.RFXSimulatorManager;
 import org.rs.refinex.rfx.simulation.RfxSimulator;
-import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
-import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.simulation.SimulatorManager;
 
 /**
