@@ -27,6 +27,6 @@ public class ClientSimulator extends Simulator {
 
     @Override
     public void onResourceStart(@NotNull Resource resource) {
-        new ContextEvent(LogSource.here(), "OnClientResourceStart", null, this, resource.getName()).dispatch();
+        new ContextEvent(LogSource.here(), "onClientResourceStart", null, this, resource.getName()).dispatch();
     }
 }

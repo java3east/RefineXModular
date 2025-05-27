@@ -31,6 +31,6 @@ public class ServerSimulator extends Simulator {
 
     @Override
     public void onResourceStart(@NotNull Resource resource) {
-        new ContextEvent(LogSource.here(), "OnResourceStart", null, this, resource.getName()).dispatch();
+        new ContextEvent(LogSource.here(), "onResourceStart", null, this, resource.getName()).dispatch();
     }
 }

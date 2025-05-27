@@ -88,6 +88,12 @@ public class MANIFEST extends Namespace {
     }
 
     @Native
+    public static void files(Environment environment, String[] files) {
+        Fxmanifest fxmanifest = (Fxmanifest) environment.getSimulator();
+        fxmanifest.set("files", files);
+    }
+
+    @Native
     public static void ui_page(Environment environment, String page) {
         Fxmanifest fxmanifest = (Fxmanifest) environment.getSimulator();
         fxmanifest.set("ui_page", page);

@@ -135,7 +135,7 @@ public class Resource {
 
     public @NotNull List<String> getFiles(@NotNull String glob) {
         glob = new File(this.path).getAbsolutePath() + "/" + glob;
-        @NotNull String finalGlob = glob;
+        @NotNull String finalGlob = glob.replace("\\", "/");
         return fileCache.get(glob, () ->
             getFiles(FileSystems.getDefault().getPathMatcher("glob:" + finalGlob))
         ).stream().map(Path::toString).collect(Collectors.toList());

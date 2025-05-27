@@ -1,7 +1,10 @@
 package org.rs.refinex.fivem.simulation;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.language.LanguageManager;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
@@ -25,11 +28,11 @@ public class FiveMSimulatorManager extends SimulatorManager {
         List<String> files = new ArrayList<>();
         String[] globs = resource.get(simulator.getType().equals("SERVER") ? "server_scripts" : "client_scripts");
         String[] sharedGlobs = resource.get("shared_scripts");
-        for (String glob : globs) {
+        for (String glob : sharedGlobs) {
             files.addAll(resource.getFiles(glob));
             files.addAll(resource.getFiles(glob.replace("**/", "")));
         }
-        for (String glob : sharedGlobs) {
+        for (String glob : globs) {
             files.addAll(resource.getFiles(glob));
             files.addAll(resource.getFiles(glob.replace("**/", "")));
         }
