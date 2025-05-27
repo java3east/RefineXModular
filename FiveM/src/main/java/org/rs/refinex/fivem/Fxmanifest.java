@@ -5,6 +5,7 @@ import org.rs.refinex.context.Manifest;
 import org.rs.refinex.fivem.namespaces.MANIFEST;
 import org.rs.refinex.fivem.util.LimitList;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class Fxmanifest extends Manifest {
         put("fx_version", new LimitList<>(1));
         put("game", new LimitList<>(1));
 
+        put("name", new LimitList<>(1));
         put("author", new LimitList<>(1));
         put("description", new LimitList<>(1));
         put("version", new LimitList<>(1));
@@ -94,4 +96,7 @@ public class Fxmanifest extends Manifest {
     public @NotNull String getName() {
         return "FIVEM:MANIFEST";
     }
+
+    @Override
+    public void onResourceStart(@NotNull Resource resource) { }
 }

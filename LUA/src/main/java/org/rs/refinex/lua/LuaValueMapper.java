@@ -1,8 +1,7 @@
 package org.rs.refinex.lua;
 
-import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.*;
+import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
 import org.rs.refinex.value.ValueMapper;
 
@@ -76,6 +75,25 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
     }
 
     @Override
+    public ObjectMapper<Function> getFunctionMapper() {
+        return value -> {
+            LuaFunction luaFunc = ((LuaValue) value).checkfunction();
+            return (Function) args -> {
+                LuaValue[] luaArgs = new LuaValue[args.length];
+                for (int i = 0; i < args.length; i++) {
+                    luaArgs[i] = LuaValueMapper.this.unmap(args[i]);
+                }
+                Varargs rets = luaFunc.invoke(LuaValue.varargsOf(luaArgs));
+                Object[] results = new Object[rets.narg()];
+                for (int i = 0; i < rets.narg(); i++) {
+                    results[i] = rets.arg(i + 1);
+                }
+                return results;
+            };
+        };
+    }
+
+    @Override
     public ObjectMapper<LuaValue> getIntegerUnmapper() {
         return value -> LuaValue.valueOf((Integer) value);
     }
@@ -126,6 +144,30 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
                 tbl.set(i + 1, array[i]);
             }
             return tbl;
+        };
+    }
+
+    @Override
+    public ObjectMapper<LuaValue> getFunctionUnmapper() {
+        return value -> {
+            if (!(value instanceof Function func)) {
+                throw new IllegalArgumentException("Value is not a Function");
+            }
+            return new LuaFunction() {
+                @Override
+                public Varargs invoke(Varargs args) {
+                    Object[] argArray = new Object[args.narg()];
+                    for (int i = 0; i < args.narg(); i++) {
+                        argArray[i] = LuaValueMapper.this.unmap(args.arg(i + 1));
+                    }
+                    Object[] results = func.invoke(argArray);
+                    LuaValue[] luaResults = new LuaValue[results.length];
+                    for (int i = 0; i < results.length; i++) {
+                        luaResults[i] = LuaValueMapper.this.unmap(results[i]);
+                    }
+                    return LuaValue.varargsOf(luaResults);
+                }
+            };
         };
     }
 }

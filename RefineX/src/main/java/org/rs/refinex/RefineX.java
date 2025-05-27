@@ -10,8 +10,10 @@ import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.plugin.PluginLoader;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.util.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -81,7 +83,7 @@ public class RefineX {
         }
         String content = read(runnerFile);
         Simulator simulator = simulation.manifest();
-        Environment env = simulator.createEnvironment("runner", language.get());
+        Environment env = simulator.createEnvironment("runner", language.get(), new Resource(simulation, FileUtils.jarDirectory().getAbsolutePath()));
         env.load(content);
     }
 }

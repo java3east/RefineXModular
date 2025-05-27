@@ -3,6 +3,7 @@ package org.rs.refinex.plugin;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
+import org.rs.refinex.util.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +41,7 @@ public class PluginLoader {
     public static void load(final String name) {
         try {
             // search for a jar file
-            File dir = new File("./plugins/" + name);
+            File dir = new File(FileUtils.jarDirectory() + "/plugins/" + name);
             File jarFile = null;
             for (File jar : Objects.requireNonNull(dir.listFiles())) {
                 if (jar.getName().endsWith(".jar")) {
@@ -56,7 +57,7 @@ public class PluginLoader {
             URL jarUrl = jarFile.toURI().toURL();
             URLClassLoader loader = new URLClassLoader(new URL[]{jarUrl}, RefineX.class.getClassLoader());
 
-            File pluginTxt = new File("./plugins/" + name + "/plugin.txt");
+            File pluginTxt = new File(FileUtils.jarDirectory() + "/plugins/" + name + "/plugin.txt");
             String path = read(pluginTxt).trim();
 
             Class<?> loadedClass = loader.loadClass(path);
@@ -77,7 +78,7 @@ public class PluginLoader {
      */
     public static int loadAll() {
         int loaded = 0;
-        File pluginsDir = new File("./plugins");
+        File pluginsDir = new File(FileUtils.jarDirectory() + "/plugins");
         if (pluginsDir.exists() && pluginsDir.isDirectory()) {
             for (File file : Objects.requireNonNull(pluginsDir.listFiles())) {
                 if (file.isDirectory()) {

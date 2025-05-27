@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.value.ValueMapper;
 
@@ -26,8 +27,8 @@ public class LUA extends Language {
     }
 
     @Override
-    public @NotNull Environment createEnvironment(final @NotNull Simulator simulator) {
-        return new LuaEnvironment(simulator);
+    public @NotNull Environment createEnvironment(final @NotNull Simulator simulator, final @NotNull Resource resource) {
+        return new LuaEnvironment(simulator, resource);
     }
 
     @Override

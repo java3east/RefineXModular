@@ -40,5 +40,10 @@ public abstract class SimulatorManager {
 
     protected abstract void startResource(final @NotNull Simulator simulator, final @NotNull Resource resource);
 
-    public abstract void startResource(final @NotNull Resource resource);
+    public void startResource(final @NotNull Resource resource) {
+        for (Simulator simulator : getSimulators()) {
+            startResource(simulator, resource);
+            simulator.onResourceStart(resource);
+        }
+    }
 }

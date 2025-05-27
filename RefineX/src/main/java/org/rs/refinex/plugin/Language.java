@@ -3,6 +3,7 @@ package org.rs.refinex.plugin;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.value.ValueMapper;
 
@@ -35,7 +36,7 @@ public abstract class Language implements Plugin {
      * Creates a new scripting environment for this language.
      * @return the created environment
      */
-    public abstract @NotNull Environment createEnvironment(final @NotNull Simulator simulator);
+    public abstract @NotNull Environment createEnvironment(final @NotNull Simulator simulator, final @NotNull Resource resource);
 
     /**
      * Returns a mapper that can be used to convert types from this language to Java types.

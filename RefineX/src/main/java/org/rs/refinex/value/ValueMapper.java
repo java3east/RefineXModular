@@ -113,6 +113,8 @@ public abstract class ValueMapper<T> {
         register(boolean.class, clazz, getBooleanMapper());
         register(Map.class, clazz, getMapMapper());
         register(Object[].class, clazz, getArrayMapper());
+        register(Function.class, clazz, getFunctionMapper());
+
         register(clazz, Integer.class, getIntegerUnmapper());
         register(clazz, int.class, getIntegerUnmapper());
         register(clazz, Long.class, getLongUnmapper());
@@ -126,6 +128,7 @@ public abstract class ValueMapper<T> {
         register(clazz, boolean.class, getBooleanUnmapper());
         register(clazz, Map.class, getMapUnmapper());
         register(clazz, Object[].class, getArrayUnmapper());
+        register(clazz, Function.class, getFunctionUnmapper());
     }
 
     /**
@@ -171,6 +174,7 @@ public abstract class ValueMapper<T> {
     public abstract ObjectMapper<Boolean> getBooleanMapper();
     public abstract ObjectMapper<Map<String, T>> getMapMapper();
     public abstract ObjectMapper<T[]> getArrayMapper();
+    public abstract ObjectMapper<Function> getFunctionMapper();
 
     public abstract ObjectMapper<T> getIntegerUnmapper();
     public abstract ObjectMapper<T> getLongUnmapper();
@@ -180,4 +184,5 @@ public abstract class ValueMapper<T> {
     public abstract ObjectMapper<T> getBooleanUnmapper();
     public abstract ObjectMapper<T> getMapUnmapper();
     public abstract ObjectMapper<T> getArrayUnmapper();
+    public abstract ObjectMapper<T> getFunctionUnmapper();
 }

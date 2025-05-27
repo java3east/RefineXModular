@@ -1,8 +1,10 @@
 package org.rs.refinex.simulation;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 
 import java.util.HashMap;
 
@@ -53,6 +55,12 @@ public abstract class Simulator {
     public abstract @NotNull String getName();
 
     /**
+     * Called when a resource started on this simulator.
+     * @param resource the resource that started
+     */
+    public abstract void onResourceStart(final @NotNull Resource resource);
+
+    /**
      * Creates a new environment that should be bound to this simulator.
      * This will also register the environment in this simulator, so it can be
      * retrieved later with {@link #getEnvironment(String)}
@@ -60,11 +68,17 @@ public abstract class Simulator {
      * @param language the language the environment should be created for
      * @return the created environment
      */
-    public @NotNull Environment createEnvironment(final @NotNull String name, final @NotNull Language language) {
-        Environment environment = language.createEnvironment(this);
+    public @NotNull Environment createEnvironment(final @NotNull String name, final @NotNull Language language, final @NotNull  Resource resource) {
+        Environment environment = language.createEnvironment(this, resource);
         addNamespaces(environment);
         environments.put(name, environment);
         return environment;
+    }
+
+    public void dispatchEvent(final @NotNull ContextEvent event) {
+        for (Environment environment : environments.values()) {
+            environment.dispatchEvent(event);
+        }
     }
 
     /**

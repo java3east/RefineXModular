@@ -44,18 +44,10 @@ public class FiveMSimulatorManager extends SimulatorManager {
         }
 
         for (Language language : languages.keySet()) {
-            Environment environment = simulator.createEnvironment(language.getName() + "_" + resource.getName(), language);
+            Environment environment = simulator.createEnvironment(language.getName() + "_" + resource.getName(), language, resource);
             for (String file : files) {
                 environment.loadfile(file);
             }
-        }
-    }
-
-    @Override
-    public void startResource(@NotNull Resource resource) {
-        Simulator[] simulators = getSimulators();
-        for (Simulator simulator : simulators) {
-            startResource(simulator, resource);
         }
     }
 }

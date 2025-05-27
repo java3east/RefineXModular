@@ -6,6 +6,7 @@ import org.rs.refinex.rfx.namespaces.RESOURCE;
 import org.rs.refinex.rfx.namespaces.SIMULATION;
 import org.rs.refinex.rfx.namespaces.SIMULATOR;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 
 /**
@@ -39,4 +40,7 @@ public class RfxSimulator extends Manifest {
     public @NotNull String getName() {
         return "RFXRunner";
     }
+
+    @Override
+    public void onResourceStart(@NotNull Resource resource) { }
 }

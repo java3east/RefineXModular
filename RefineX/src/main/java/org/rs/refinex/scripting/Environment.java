@@ -1,8 +1,12 @@
 package org.rs.refinex.scripting;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.context.ContextEvent;
+import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
+import org.rs.refinex.log.LogSource;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.value.Function;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -31,6 +35,12 @@ public interface Environment {
      */
     void loadfile(final @NotNull String path);
 
+    void addEventHandler(final @NotNull ContextEventHandler handler);
+
+    void dispatchEvent(final @NotNull ContextEvent event);
+
+    @NotNull LogSource currentSource();
+
     /**
      * Returns the simulator this environment is bound to.
      * @return the simulator
@@ -48,6 +58,12 @@ public interface Environment {
      * @return the resource path
      */
     @NotNull String getResourcePath();
+
+    /**
+     * Returns the resource this environment is associated with.
+     * @return the resource
+     */
+     @NotNull Resource getResource();
 
     /**
      * Returns the function with the given name.

@@ -60,7 +60,7 @@ public class Resource {
         if (language.isEmpty())
             throw new RuntimeException("No language found for extension: " + extension);
         Language lang = language.get();
-        Environment environment = manifest.createEnvironment("manifest", lang);
+        Environment environment = manifest.createEnvironment("manifest", lang, this);
         environment.loadfile(path + "/" + simulation.getContext().manifestName());
         manifest.validate();
     }
