@@ -20,7 +20,8 @@ public class FiveMSimulatorManager extends SimulatorManager {
         super(simulation);
     }
 
-    private void startResource(final @NotNull Simulator simulator, final @NotNull Resource resource) {
+    @Override
+    protected void startResource(final @NotNull Simulator simulator, final @NotNull Resource resource) {
         List<String> files = new ArrayList<>();
         String[] globs = resource.get(simulator.getType().equals("SERVER") ? "server_scripts" : "client_scripts");
         String[] sharedGlobs = resource.get("shared_scripts");

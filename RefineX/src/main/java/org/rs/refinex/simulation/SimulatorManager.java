@@ -24,6 +24,8 @@ public abstract class SimulatorManager {
         List<Simulator> simulators = this.simulators.getOrDefault(type, new ArrayList<>());
         simulators.add(simulator);
         this.simulators.put(type, simulators);
+        for (Resource resource : this.simulation.getRunningResources())
+            startResource(simulator, resource);
         return simulator;
     }
 
@@ -35,6 +37,8 @@ public abstract class SimulatorManager {
         List<Simulator> simulators = this.simulators.values().stream().flatMap(List::stream).toList();
         return simulators.toArray(Simulator[]::new);
     }
+
+    protected abstract void startResource(final @NotNull Simulator simulator, final @NotNull Resource resource);
 
     public abstract void startResource(final @NotNull Resource resource);
 }

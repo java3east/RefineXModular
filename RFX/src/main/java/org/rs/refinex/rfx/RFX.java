@@ -7,6 +7,7 @@ import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.rfx.simulation.RfxSimulator;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
+import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.simulation.SimulatorManager;
 
 /**
@@ -44,6 +45,9 @@ public class RFX extends Context {
     @Override
     public @NotNull SimulatorManager createSimulatorManager(@NotNull Simulation simulation) {
         return new SimulatorManager(simulation) {
+            @Override
+            protected void startResource(@NotNull Simulator simulator, @NotNull Resource resource) {}
+
             @Override
             public void startResource(@NotNull Resource resource) { }
         };
