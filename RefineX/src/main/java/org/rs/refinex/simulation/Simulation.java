@@ -48,6 +48,10 @@ public class Simulation {
         return simulatorManager.createSimulator(type);
     }
 
+    public Simulator[] getSimulator(final @NotNull String type) {
+        return simulatorManager.getSimulators(type);
+    }
+
     /**
      * Creates the default simulator for this simulation.
      * This is usually the manifest simulator.

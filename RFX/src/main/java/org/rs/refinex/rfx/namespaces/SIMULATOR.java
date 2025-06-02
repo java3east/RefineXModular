@@ -17,4 +17,10 @@ public class SIMULATOR extends Namespace {
         Simulator simulator = sim.createSimulator(simulatorType);
         return GUID.register(simulator);
     }
+
+    @Native
+    public static void SIMULATOR_TICK(Environment environment, GUID simulatorID, long ms) {
+        Simulator sim = (Simulator) GUID.get(simulatorID, Simulator.class);
+        sim.tick(ms / 1000.0);
+    }
 }

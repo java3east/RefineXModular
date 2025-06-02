@@ -9,6 +9,9 @@ import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.value.Varargs;
+
+import java.util.Optional;
 
 public class ClientSimulator extends Simulator {
     public ClientSimulator(@NotNull Simulation simulation) {
@@ -26,7 +29,16 @@ public class ClientSimulator extends Simulator {
     }
 
     @Override
+    public boolean onResourceStarting(@NotNull Resource resource) {
+        setData("event_canceled", false);
+        new ContextEvent(LogSource.here(), "onResourceStarting", null, this, Varargs.of(resource.getName())).dispatch();
+        Optional<Object> cancel = getData("event_canceled");
+        return cancel.filter(o -> (boolean) o).isPresent();
+    }
+
+    @Override
     public void onResourceStart(@NotNull Resource resource) {
-        new ContextEvent(LogSource.here(), "onClientResourceStart", null, this, resource.getName()).dispatch();
+        new ContextEvent(LogSource.here(), "onClientResourceStart", null, this, Varargs.of(resource.getName())).queue();
+        new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch();
     }
 }

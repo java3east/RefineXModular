@@ -15,5 +15,8 @@ public class RFXSimulatorManager extends SimulatorManager {
     protected void startResource(@NotNull Simulator simulator, @NotNull Resource resource) {}
 
     @Override
+    protected void onCreateSimulator(@NotNull Simulator simulator) { }
+
+    @Override
     public void startResource(@NotNull Resource resource) {}
 }

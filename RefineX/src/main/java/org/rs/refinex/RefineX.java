@@ -1,6 +1,10 @@
 package org.rs.refinex;
 
 import org.rs.refinex.context.ContextManager;
+import org.rs.refinex.context.Native;
+import org.rs.refinex.event.EventHandler;
+import org.rs.refinex.event.EventManager;
+import org.rs.refinex.event.NativeCallEvent;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.log.LogEntry;
 import org.rs.refinex.log.LogSource;
@@ -30,6 +34,7 @@ import java.util.Scanner;
  */
 public class RefineX {
     public static final Logger logger = new Logger();
+    public static final EventManager manager = new EventManager();
 
     private static String read(File file) {
         try {
@@ -55,8 +60,9 @@ public class RefineX {
             System.exit(1);
         }
 
+        long start = System.currentTimeMillis();
         int amount = PluginLoader.loadAll();
-        logger.log(LogType.INFO, "Loaded " + amount + " plugin(s).", LogSource.here());
+        logger.log(LogType.INFO, "Loaded " + amount + " plugin(s) (took: " + (System.currentTimeMillis() - start) + " ms)", LogSource.here());
 
         String contextName = args[0];
         String runnerName = args[1];
@@ -84,6 +90,12 @@ public class RefineX {
         String content = read(runnerFile);
         Simulator simulator = simulation.manifest();
         Environment env = simulator.createEnvironment("runner", language.get(), new Resource(simulation, FileUtils.jarDirectory().getAbsolutePath()));
+        start = System.currentTimeMillis();
         env.load(content);
+
+        logger.log(LogType.INFO, "Done (took: " + (System.currentTimeMillis() - start) + " ms)", LogSource.here());
+        long errors = logger.getLogs().stream().filter(logEntry -> logEntry.type() == LogType.ERROR).count();
+        if (errors > 0)
+            System.exit(1);
     }
 }

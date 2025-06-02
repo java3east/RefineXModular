@@ -3,6 +3,7 @@ package org.rs.refinex.fivem;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.context.Manifest;
+import org.rs.refinex.fivem.quality.NFCOL;
 import org.rs.refinex.fivem.simulation.FiveMSimulatorManager;
 import org.rs.refinex.plugin.Context;
 import org.rs.refinex.plugin.RefineXPlugin;
@@ -24,6 +25,7 @@ public class FiveM extends Context {
         addGenerator("MANIFEST", Fxmanifest::new);
         addGenerator("SERVER", ServerSimulator::new);
         addGenerator("CLIENT", ClientSimulator::new);
+        RefineX.manager.registerEventHandler(NFCOL.class);
     }
 
     @Override

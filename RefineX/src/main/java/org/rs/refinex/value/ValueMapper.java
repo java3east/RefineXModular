@@ -166,6 +166,31 @@ public abstract class ValueMapper<T> {
         return unmapper.map(object);
     }
 
+    public final @NotNull Object[] match(final @NotNull T[] in, final @NotNull Class<?>[] clazz) {
+        Object[] out = new Object[in.length];
+        for (int i = 0; i < in.length; i++) {
+            T value = in[i];
+            Class<?> targetClass = clazz[i + 1];
+            if (Varargs.class.isAssignableFrom(targetClass)) {
+                T[] varargs = (T[]) Array.newInstance(this.clazz, in.length - i);
+                System.arraycopy(in, i, varargs, 0, in.length - i);
+                out[i] = new Varargs(varargs);
+                i = in.length;
+            } else if (isNull(value)) {
+                out[i] = null;
+                continue;
+            }else if (targetClass.isArray()) {
+                out[i] = arrayMap(getArrayMapper().map(value), targetClass);
+            } else {
+                ObjectMapper<?> mapper = getMapper(targetClass, value.getClass(), false);
+                out[i] = mapper.map(value);
+            }
+        }
+        return out;
+    }
+
+    public abstract boolean isNull(final @NotNull T object);
+
     public abstract ObjectMapper<Integer> getIntegerMapper();
     public abstract ObjectMapper<Long> getLongMapper();
     public abstract ObjectMapper<Float> getFloatMapper();
@@ -175,6 +200,7 @@ public abstract class ValueMapper<T> {
     public abstract ObjectMapper<Map<String, T>> getMapMapper();
     public abstract ObjectMapper<T[]> getArrayMapper();
     public abstract ObjectMapper<Function> getFunctionMapper();
+    public abstract ObjectMapper<Varargs> getVarargsMapper();
 
     public abstract ObjectMapper<T> getIntegerUnmapper();
     public abstract ObjectMapper<T> getLongUnmapper();

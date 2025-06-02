@@ -1,5 +1,6 @@
 package org.rs.refinex.lua;
 
+import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.*;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
@@ -15,6 +16,27 @@ import java.util.Map;
 public class LuaValueMapper extends ValueMapper<LuaValue> {
     public LuaValueMapper() {
         super(LuaValue.class);
+    }
+
+    private Varargs unmap(org.rs.refinex.value.Varargs varargs) {
+        LuaValue[] values = new LuaValue[varargs.length()];
+        for (int i = 0; i < varargs.length(); i++) {
+            Object o = varargs.values()[i];
+            if (o == null) {
+                values[i] = LuaValue.NIL;
+            } else if (o instanceof LuaValue luaValue) {
+                values[i] = luaValue;
+            } else {
+                values[i] = unmap(varargs.values()[i]);
+            }
+        }
+        return LuaValue.varargsOf(values);
+    }
+
+    @Override
+    public boolean isNull(LuaValue object) {
+        if (object == null) return true;
+        return object.isnil();
     }
 
     @Override
@@ -79,17 +101,22 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
         return value -> {
             LuaFunction luaFunc = ((LuaValue) value).checkfunction();
             return (Function) args -> {
-                LuaValue[] luaArgs = new LuaValue[args.length];
-                for (int i = 0; i < args.length; i++) {
-                    luaArgs[i] = LuaValueMapper.this.unmap(args[i]);
-                }
-                Varargs rets = luaFunc.invoke(LuaValue.varargsOf(luaArgs));
-                Object[] results = new Object[rets.narg()];
-                for (int i = 0; i < rets.narg(); i++) {
-                    results[i] = rets.arg(i + 1);
-                }
-                return results;
+                Varargs luaArgs = unmap(args);
+                Varargs results = luaFunc.invoke(luaArgs);
+                return getVarargsMapper().map(results);
             };
+        };
+    }
+
+    @Override
+    public ObjectMapper<org.rs.refinex.value.Varargs> getVarargsMapper() {
+        return value -> {
+            Varargs varargs = (Varargs) value;
+            LuaValue[] values = new LuaValue[varargs.narg()];
+            for (int i = 0; i < varargs.narg(); i++) {
+                values[i] = varargs.arg(i + 1);
+            }
+            return new org.rs.refinex.value.Varargs(values);
         };
     }
 
@@ -156,16 +183,8 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
             return new LuaFunction() {
                 @Override
                 public Varargs invoke(Varargs args) {
-                    Object[] argArray = new Object[args.narg()];
-                    for (int i = 0; i < args.narg(); i++) {
-                        argArray[i] = LuaValueMapper.this.unmap(args.arg(i + 1));
-                    }
-                    Object[] results = func.invoke(argArray);
-                    LuaValue[] luaResults = new LuaValue[results.length];
-                    for (int i = 0; i < results.length; i++) {
-                        luaResults[i] = LuaValueMapper.this.unmap(results[i]);
-                    }
-                    return LuaValue.varargsOf(luaResults);
+                    org.rs.refinex.value.Varargs results = func.invoke(getVarargsMapper().map(args));
+                    return unmap(results);
                 }
             };
         };

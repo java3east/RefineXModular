@@ -6,10 +6,10 @@ import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.simulation.Simulator;
-import org.rs.refinex.value.Function;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Environment represents a scripting environment, they are responsible for
@@ -17,6 +17,21 @@ import java.util.List;
  * Each environment is bound to a simulator.
  */
 public interface Environment {
+    /**
+     * Returns the value from the data store with the given key.
+     * @param key the key to get the value for
+     * @return an Optional containing the value if it exists, or an empty Optional if it does not
+     */
+    Optional<Object> get(final @NotNull String key);
+
+    /**
+     * Sets the value for the given key in the data store.
+     * @param key the key to set the value for
+     * @param value the value to set
+     * @param shared if true this value will also be pushed to the scripting environment
+     */
+    void set(final @NotNull String key, final @NotNull Object value, boolean shared);
+
     /**
      * Adds the given namespace to the environment.
      * @param namespace the namespace to add
@@ -38,6 +53,8 @@ public interface Environment {
     void addEventHandler(final @NotNull ContextEventHandler handler);
 
     void dispatchEvent(final @NotNull ContextEvent event);
+
+    void tick(double frameTime);
 
     @NotNull LogSource currentSource();
 

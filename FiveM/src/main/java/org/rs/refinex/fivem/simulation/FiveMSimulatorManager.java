@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FiveMSimulatorManager extends SimulatorManager {
+    private static int nextCLID = 1;
+
     public FiveMSimulatorManager(@NotNull Simulation simulation) {
         super(simulation);
     }
@@ -51,6 +53,15 @@ public class FiveMSimulatorManager extends SimulatorManager {
             for (String file : files) {
                 environment.loadfile(file);
             }
+        }
+    }
+
+    @Override
+    protected void onCreateSimulator(@NotNull Simulator simulator) {
+        if (simulator.getType().equals("SERVER")) {
+            simulator.setData("server_id", 0);
+        } else {
+            simulator.setData("server_id", nextCLID++);
         }
     }
 }

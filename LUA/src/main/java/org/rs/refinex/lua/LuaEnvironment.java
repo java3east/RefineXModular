@@ -5,19 +5,21 @@ import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.FileUtils;
-import org.rs.refinex.value.Function;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A Lua environment for the RefineX simulation program.
@@ -29,6 +31,7 @@ public class LuaEnvironment implements Environment {
     private final Globals globals = JsePlatform.debugGlobals();
     private final List<Namespace> namespaces = new ArrayList<>();
     private final HashMap<String, List<ContextEventHandler>> eventHandlers = new HashMap<>();
+    private final HashMap<String, Object> dataStore = new HashMap<>();
 
     /**
      * Creates a new Lua environment with the given simulator.
@@ -45,18 +48,44 @@ public class LuaEnvironment implements Environment {
     }
 
     @Override
+    public Optional<Object> get(@NotNull String key) {
+        if (!dataStore.containsKey(key)) {
+            return Optional.empty();
+        }
+        return Optional.of(dataStore.get(key));
+    }
+
+    @Override
+    public void set(@NotNull String key, @NotNull Object value, boolean shared) {
+        dataStore.put(key, value);
+        if (shared) {
+            globals.set(key, new LuaValueMapper().unmap(value));
+        }
+    }
+
+    @Override
     public void addNamespace(@NotNull Namespace namespace) {
         this.namespaces.add(namespace);
     }
 
     @Override
     public void load(@NotNull String str) {
-        globals.load(str).call();
+        try {
+            globals.load(str).call();
+        } catch (Exception e) {
+            RefineX.logger.log(LogType.ERROR, "An error occurred while executing Lua code: "
+                    + e.getMessage(), LogSource.here());
+        }
     }
 
     @Override
     public void loadfile(@NotNull String path) {
-        globals.loadfile(path).call();
+        try {
+            globals.loadfile(path).call();
+        } catch (Exception e) {
+            RefineX.logger.log(LogType.ERROR, "An error occurred while loading Lua file: "
+                    + e.getMessage(), LogSource.here());
+        }
     }
 
     @Override
@@ -70,8 +99,27 @@ public class LuaEnvironment implements Environment {
     public void dispatchEvent(@NotNull ContextEvent event) {
         List<ContextEventHandler> handlers = eventHandlers.getOrDefault(event.name(), new ArrayList<>());
         for (ContextEventHandler handler : handlers) {
-            handler.handle(event);
+            try {
+                handler.handle(event);
+            } catch (Exception e) {
+                RefineX.logger.log(LogType.ERROR, "Error during event handling for " + event.name() + ": "
+                        + e.getMessage(), currentSource());
+            }
         }
+    }
+
+    @Override
+    public void tick(double frameTime) {
+        LuaValue value = this.globals.get("REFINEX_TICK");
+        if (value.isfunction()) {
+            try {
+                value.call(LuaValue.valueOf(frameTime));
+            } catch(Exception e) {
+                RefineX.logger.log(LogType.ERROR, "An error occurred while executing the REFINEX_TICK function: "
+                        + e.getMessage(), currentSource());
+            }
+        } else
+            RefineX.logger.log(LogType.WARNING, "REFINEX_TICK is not a function, skipping tick execution", currentSource());
     }
 
     @Override

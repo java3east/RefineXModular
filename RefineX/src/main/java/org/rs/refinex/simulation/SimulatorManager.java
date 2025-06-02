@@ -24,6 +24,7 @@ public abstract class SimulatorManager {
         List<Simulator> simulators = this.simulators.getOrDefault(type, new ArrayList<>());
         simulators.add(simulator);
         this.simulators.put(type, simulators);
+        onCreateSimulator(simulator);
         for (Resource resource : this.simulation.getRunningResources())
             startResource(simulator, resource);
         return simulator;
@@ -40,10 +41,15 @@ public abstract class SimulatorManager {
 
     protected abstract void startResource(final @NotNull Simulator simulator, final @NotNull Resource resource);
 
+    protected abstract void onCreateSimulator(final @NotNull Simulator simulator);
+
     public void startResource(final @NotNull Resource resource) {
         for (Simulator simulator : getSimulators()) {
-            startResource(simulator, resource);
-            simulator.onResourceStart(resource);
+            boolean cancel = simulator.onResourceStarting(resource);
+            if (!cancel) {
+                startResource(simulator, resource);
+                simulator.onResourceStart(resource);
+            }
         }
     }
 }

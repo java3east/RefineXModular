@@ -98,5 +98,10 @@ public class Fxmanifest extends Manifest {
     }
 
     @Override
+    public boolean onResourceStarting(@NotNull Resource resource) {
+        return false;
+    }
+
+    @Override
     public void onResourceStart(@NotNull Resource resource) { }
 }

@@ -6,7 +6,10 @@ import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Simulators represent a container of simulated scripting environments.
@@ -18,6 +21,8 @@ public abstract class Simulator {
     private final @NotNull String type;
     private final @NotNull Simulation simulation;
     private final HashMap<String, Environment> environments = new HashMap<>();
+    private final HashMap<String, Object> dataset = new HashMap<>();
+    private final List<ContextEvent> eventQueue = new ArrayList<>();
 
     private long gameTimer = 0;
 
@@ -28,6 +33,14 @@ public abstract class Simulator {
     public Simulator(final @NotNull Simulation simulation, final @NotNull String type) {
         this.simulation = simulation;
         this.type = type;
+    }
+
+    public @NotNull Optional<Object> getData(final @NotNull String key) {
+        return Optional.ofNullable(dataset.get(key));
+    }
+
+    public void setData(final @NotNull String key, final @NotNull Object value) {
+        dataset.put(key, value);
     }
 
     public @NotNull String getType() {
@@ -55,6 +68,14 @@ public abstract class Simulator {
     public abstract @NotNull String getName();
 
     /**
+     * This method is called when a resource is trying to start on this simulator.
+     * If the return value is false, the resource will not be started.
+     * @param resource the resource that is trying to start
+     * @return true if the resource can start, false otherwise
+     */
+    public abstract boolean onResourceStarting(final @NotNull Resource resource);
+
+    /**
      * Called when a resource started on this simulator.
      * @param resource the resource that started
      */
@@ -78,6 +99,21 @@ public abstract class Simulator {
     public void dispatchEvent(final @NotNull ContextEvent event) {
         for (Environment environment : environments.values()) {
             environment.dispatchEvent(event);
+        }
+    }
+
+    public void queueEvent(final @NotNull ContextEvent event) {
+        eventQueue.add(event);
+    }
+
+    public void tick(double frameTime) {
+        gameTimer += (long) (frameTime * 1000);
+        for (ContextEvent event : eventQueue) {
+            dispatchEvent(event);
+        }
+        eventQueue.clear();
+        for (Environment environment : environments.values()) {
+            environment.tick(frameTime);
         }
     }
 
