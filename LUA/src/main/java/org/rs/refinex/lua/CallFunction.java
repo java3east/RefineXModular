@@ -31,7 +31,7 @@ class CallFunction extends VarArgFunction {
         try {
             return m.invoke(null, args);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to invoke function " + m.getName(), e);
+            throw new RuntimeException("Failed to invoke function '" + m.getName() + "': " + e.getMessage(), e);
         }
     }
 
@@ -40,20 +40,30 @@ class CallFunction extends VarArgFunction {
         if (varargs.narg() < 1) {
             throw new IllegalArgumentException("Function expects at least one argument");
         }
-        String funName = varargs.checkjstring(1);
-        Method m = environment.getFunction(funName);
-        Object[] args = new Object[m.getParameterCount()];
-        LuaValueMapper mapper = new LuaValueMapper();
-        LuaValue[] luaArgs = new LuaValue[args.length - 1];
-        for (int i = 1; i < args.length; i++) {
-            luaArgs[i - 1] = varargs.arg(i + 1);
+        String funName = "???";
+        try {
+            funName = varargs.checkjstring(1);
+        } catch(Exception e) {
+            RefineX.logger.log(LogType.ERROR, "Failed to get name of function: " + e.getMessage(), environment.currentSource());
         }
-        Object[] mappedArgs = mapper.match(luaArgs, m.getParameterTypes());
-        args[0] = environment;
-        System.arraycopy(mappedArgs, 0, args, 1, mappedArgs.length);
-        RefineX.manager.dispatchEvent(new NativeCallEvent(environment, funName, args));
-        Object result = invoke(m, args);
-        if (result == null) return LuaValue.NIL;
-        return mapper.unmap(result);
+        try {
+            Method m = environment.getFunction(funName);
+            Object[] args = new Object[m.getParameterCount()];
+            LuaValueMapper mapper = new LuaValueMapper();
+            LuaValue[] luaArgs = new LuaValue[args.length - 1];
+            for (int i = 1; i < args.length; i++) {
+                luaArgs[i - 1] = varargs.arg(i + 1);
+            }
+            Object[] mappedArgs = mapper.match(luaArgs, m.getParameterTypes());
+            args[0] = environment;
+            System.arraycopy(mappedArgs, 0, args, 1, mappedArgs.length);
+            RefineX.manager.dispatchEvent(new NativeCallEvent(environment, funName, args));
+            Object result = invoke(m, args);
+            if (result == null) return LuaValue.NIL;
+            return mapper.unmap(result);
+        } catch (Exception e) {
+            RefineX.logger.log(LogType.ERROR, e.getMessage(), environment.currentSource());
+        }
+        return LuaValue.NIL;
     }
 }

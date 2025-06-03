@@ -10,9 +10,9 @@ import org.rs.refinex.value.Varargs;
 
 public record ContextEvent (@NotNull LogSource origin, @NotNull String name, Environment source, @NotNull Simulator target, @NotNull
                             Varargs data) {
-    public void dispatch() {
+    public void dispatch(boolean ignoreMissingHandlers) {
         RefineX.manager.dispatchEvent(new EventDispatchedEvent(this, false));
-        target.dispatchEvent(this);
+        target.dispatchEvent(this, ignoreMissingHandlers);
     }
 
     public void queue() {

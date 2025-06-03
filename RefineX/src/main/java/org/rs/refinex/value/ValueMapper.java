@@ -153,7 +153,6 @@ public abstract class ValueMapper<T> {
      */
     public final @NotNull T unmap(final @NotNull Object object) {
         if (object.getClass().isArray()) {
-            Object[] a = (Object[]) object;
             T[] array = (T[]) Array.newInstance(clazz, Array.getLength(object));
             for (int i = 0; i < array.length; i++) {
                 Object value = Array.get(object, i);

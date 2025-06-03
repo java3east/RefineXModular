@@ -1,7 +1,9 @@
 package org.rs.refinex.simulation;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
@@ -96,9 +98,13 @@ public abstract class Simulator {
         return environment;
     }
 
-    public void dispatchEvent(final @NotNull ContextEvent event) {
+    public void dispatchEvent(final @NotNull ContextEvent event, boolean ignoreMissingHandlers) {
+        boolean handled = false;
         for (Environment environment : environments.values()) {
-            environment.dispatchEvent(event);
+            if (environment.dispatchEvent(event)) handled = true;
+        }
+        if (!handled && !ignoreMissingHandlers) {
+            RefineX.logger.log(LogType.WARNING, "Event '" + event.name() + "' has no registered handler.", event.origin());
         }
     }
 
@@ -109,7 +115,7 @@ public abstract class Simulator {
     public void tick(double frameTime) {
         gameTimer += (long) (frameTime * 1000);
         for (ContextEvent event : eventQueue) {
-            dispatchEvent(event);
+            dispatchEvent(event, false);
         }
         eventQueue.clear();
         for (Environment environment : environments.values()) {

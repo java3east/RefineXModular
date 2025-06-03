@@ -35,7 +35,7 @@ public class ServerSimulator extends Simulator {
     @Override
     public boolean onResourceStarting(@NotNull Resource resource) {
         setData("event_canceled", false);
-        new ContextEvent(LogSource.here(), "onResourceStarting", null, this, Varargs.of(resource.getName())).dispatch();
+        new ContextEvent(LogSource.here(), "onResourceStarting", null, this, Varargs.of(resource.getName())).dispatch(true);
         Optional<Object> cancel = getData("event_canceled");
         return cancel.filter(o -> (boolean) o).isPresent();
     }
@@ -43,6 +43,6 @@ public class ServerSimulator extends Simulator {
     @Override
     public void onResourceStart(@NotNull Resource resource) {
         new ContextEvent(LogSource.here(), "onServerResourceStart", null, this, Varargs.of(resource.getName())).queue();
-        new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch();
+        new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch(true);
     }
 }

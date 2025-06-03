@@ -52,7 +52,7 @@ public interface Environment {
 
     void addEventHandler(final @NotNull ContextEventHandler handler);
 
-    void dispatchEvent(final @NotNull ContextEvent event);
+    boolean dispatchEvent(final @NotNull ContextEvent event);
 
     void tick(double frameTime);
 

@@ -25,8 +25,10 @@ public abstract class SimulatorManager {
         simulators.add(simulator);
         this.simulators.put(type, simulators);
         onCreateSimulator(simulator);
-        for (Resource resource : this.simulation.getRunningResources())
+        for (Resource resource : this.simulation.getRunningResources()) {
             startResource(simulator, resource);
+            simulator.onResourceStart(resource);
+        }
         return simulator;
     }
 

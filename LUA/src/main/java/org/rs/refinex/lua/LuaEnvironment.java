@@ -96,8 +96,10 @@ public class LuaEnvironment implements Environment {
     }
 
     @Override
-    public void dispatchEvent(@NotNull ContextEvent event) {
+    public boolean dispatchEvent(@NotNull ContextEvent event) {
         List<ContextEventHandler> handlers = eventHandlers.getOrDefault(event.name(), new ArrayList<>());
+        if (handlers.isEmpty()) return false;
+
         for (ContextEventHandler handler : handlers) {
             try {
                 handler.handle(event);
@@ -106,6 +108,7 @@ public class LuaEnvironment implements Environment {
                         + e.getMessage(), currentSource());
             }
         }
+        return true;
     }
 
     @Override

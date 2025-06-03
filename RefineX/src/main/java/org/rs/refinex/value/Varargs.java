@@ -1,5 +1,7 @@
 package org.rs.refinex.value;
 
+import java.util.Arrays;
+
 public record Varargs(Object[] values) {
     public static Varargs empty() {
         return of();
@@ -11,5 +13,12 @@ public record Varargs(Object[] values) {
 
     public int length() {
         return values.length;
+    }
+
+    @Override
+    public String toString() {
+        return "Varargs(" +
+                 Arrays.toString(values) +
+                ')';
     }
 }

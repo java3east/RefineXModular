@@ -20,12 +20,12 @@ public class NFCOL {
     );
     private static final List<String> allowedNatives = List.of(
         "AddEventHandler",
-        "RegisterNetEvent"
+        "RegisterNetEvent",
+        "CREATE_EXPORT"
     );
 
     @EventHandler
     public static void onEvent(EventDispatchedEvent event) {
-
         for (String eventName : startEventNames) {
             if (event.getEvent().name().equals(eventName)) {
                 Simulator simulator = event.getEvent().target();

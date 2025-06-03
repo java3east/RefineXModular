@@ -21,6 +21,26 @@ public class ClientSimulator extends Simulator {
     @Override
     protected void addNamespaces(@NotNull Environment environment) {
         environment.addNamespace(new CFX());
+        environment.load("""
+                exports = {}
+                setmetatable(exports, {
+                    __call = function(t, name, func)
+                        CREATE_EXPORT(name, func)
+                    end,
+                    __index = function(t, k1)
+                        local m = {}
+                        setmetatable(m, {
+                            __index = function(t, k2)
+                                local fun = GET_EXPORT(k1, k2)
+                                return function(_, ...)
+                                    fun(...)
+                                end
+                            end
+                        })
+                        return m
+                    end
+                })
+                """);
     }
 
     @Override
@@ -31,7 +51,7 @@ public class ClientSimulator extends Simulator {
     @Override
     public boolean onResourceStarting(@NotNull Resource resource) {
         setData("event_canceled", false);
-        new ContextEvent(LogSource.here(), "onResourceStarting", null, this, Varargs.of(resource.getName())).dispatch();
+        new ContextEvent(LogSource.here(), "onResourceStarting", null, this, Varargs.of(resource.getName())).dispatch(true);
         Optional<Object> cancel = getData("event_canceled");
         return cancel.filter(o -> (boolean) o).isPresent();
     }
@@ -39,6 +59,6 @@ public class ClientSimulator extends Simulator {
     @Override
     public void onResourceStart(@NotNull Resource resource) {
         new ContextEvent(LogSource.here(), "onClientResourceStart", null, this, Varargs.of(resource.getName())).queue();
-        new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch();
+        new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch(true);
     }
 }

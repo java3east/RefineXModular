@@ -1,7 +1,9 @@
 package org.rs.refinex.lua;
 
-import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.*;
+import org.rs.refinex.RefineX;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
 import org.rs.refinex.value.ValueMapper;
@@ -178,7 +180,8 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
     public ObjectMapper<LuaValue> getFunctionUnmapper() {
         return value -> {
             if (!(value instanceof Function func)) {
-                throw new IllegalArgumentException("Value is not a Function");
+                RefineX.logger.log(LogType.ERROR, "value is not a function", LogSource.here());
+                return LuaValue.NIL;
             }
             return new LuaFunction() {
                 @Override
