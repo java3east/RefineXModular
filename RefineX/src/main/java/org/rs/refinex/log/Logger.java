@@ -22,6 +22,14 @@ public class Logger {
         log(entry);
     }
 
+    public void catchErrors(Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            log(LogType.ERROR, "An error occurred: " + e.getMessage() + "[type = " + e.getClass() + "]", LogSource.here());
+        }
+    }
+
     public List<LogEntry> getLogs() {
         return new ArrayList<>(logs);
     }

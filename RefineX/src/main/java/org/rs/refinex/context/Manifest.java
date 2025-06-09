@@ -1,12 +1,16 @@
 package org.rs.refinex.context;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.LimitList;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the manifest of a resource.
@@ -30,6 +34,12 @@ public abstract class Manifest extends Simulator {
     }
 
     public Object[] get(@NotNull String key) {
+        if (!data.containsKey(key) || data.get(key).isEmpty()) {
+            Optional<Object> value = getData(key);
+            if (value.isPresent()) {
+                return new Object[]{value.get()};
+            }
+        }
         return data.getOrDefault(key, new LimitList<>(-1)).toArray(new Object[0]);
     }
     /**

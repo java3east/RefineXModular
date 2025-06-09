@@ -38,7 +38,7 @@ class CallFunction extends VarArgFunction {
     @Override
     public Varargs invoke(Varargs varargs) {
         if (varargs.narg() < 1) {
-            throw new IllegalArgumentException("Function expects at least one argument");
+            RefineX.logger.log(LogType.ERROR, "CallFunction requires at least one argument (the function name)", environment.currentSource());
         }
         String funName = "???";
         try {
@@ -62,7 +62,8 @@ class CallFunction extends VarArgFunction {
             if (result == null) return LuaValue.NIL;
             return mapper.unmap(result);
         } catch (Exception e) {
-            RefineX.logger.log(LogType.ERROR, e.getMessage(), environment.currentSource());
+            RefineX.logger.log(LogType.ERROR, e.getMessage() + " [" + e.getClass() + "]", environment.currentSource());
+            e.printStackTrace();
         }
         return LuaValue.NIL;
     }

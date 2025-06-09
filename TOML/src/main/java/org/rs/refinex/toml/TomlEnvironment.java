@@ -2,10 +2,12 @@ package org.rs.refinex.toml;
 
 import com.moandjiezana.toml.Toml;
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
@@ -18,7 +20,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TomlEnvironment implements Environment {
-    private final Map<String, Object> toml = new HashMap<>();
     private final HashMap<String, Object> dataStore = new HashMap<>();
     private final Simulator simulator;
     private final Resource resource;
@@ -38,10 +39,11 @@ public class TomlEnvironment implements Environment {
 
     @Override
     public void set(@NotNull String key, @NotNull Object value, boolean shared) {
-        dataStore.put(key, value);
-        if (shared) {
-            toml.put(key, value);
+        if (key.equals("title")) {
+            set("name", value.toString(), true);
         }
+        simulator.setData(key, value);
+        this.dataStore.put(key, value);
     }
 
     @Override
@@ -53,7 +55,13 @@ public class TomlEnvironment implements Environment {
         for (Map.Entry<String, Object> entry : toml.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            this.toml.put(key, value);
+            if (value instanceof Map) {
+                for (Map.Entry<String, Object> subEntry : ((Map<String, Object>) value).entrySet()) {
+                    String subKey = key + "." + subEntry.getKey();
+                    this.set(key, subEntry.getValue(), true);
+                }
+            }
+            this.set(key, value, true);
         }
     }
 
@@ -63,7 +71,13 @@ public class TomlEnvironment implements Environment {
         for (Map.Entry<String, Object> entry : toml.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            this.toml.put(key, value);
+            if (value instanceof Map) {
+                for (Map.Entry<String, Object> subEntry : ((Map<String, Object>) value).entrySet()) {
+                    String subKey = subEntry.getKey();
+                    this.set(subKey, subEntry.getValue(), true);
+                }
+            }
+            this.set(key, value, true);
         }
     }
 
