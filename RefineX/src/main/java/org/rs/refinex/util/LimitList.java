@@ -1,4 +1,4 @@
-package org.rs.refinex.fivem.util;
+package org.rs.refinex.util;
 
 import java.util.ArrayList;
 import java.util.Collection;

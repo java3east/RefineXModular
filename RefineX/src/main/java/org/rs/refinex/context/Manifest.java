@@ -3,7 +3,9 @@ package org.rs.refinex.context;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.util.LimitList;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,6 +13,8 @@ import java.util.List;
  * A manifest contains metadata about the resource (e.g. name, version, author, server / client scripts, ...)
  */
 public abstract class Manifest extends Simulator {
+    protected final HashMap<String, List<Object>> data = new HashMap<>();
+
     /**
      * Creates a new instance of the manifest.
      * @param simulation the simulation this manifest belongs to
@@ -19,21 +23,15 @@ public abstract class Manifest extends Simulator {
         super(simulation, "MANIFEST");
     }
 
-    /**
-     * Sets the value for the given key.
-     * @param key the key to set the value for
-     * @param value the value to set
-     */
-    public abstract void set(final @NotNull String key, final @NotNull String value);
+    public void set(@NotNull String list, @NotNull String value) {
+        List<Object> values = data.getOrDefault(list, new LimitList<>(-1));
+        values.add(value);
+        data.put(list, values);
+    }
 
-    /**
-     * Returns the values saved for the given key.
-     * If the key does not exist, an empty array is returned.
-     * @param key the key to get the values for
-     * @return the values saved for the given key
-     */
-    public abstract String[] get(final @NotNull String key);
-
+    public Object[] get(@NotNull String key) {
+        return data.getOrDefault(key, new LimitList<>(-1)).toArray(new Object[0]);
+    }
     /**
      * Adds all the values to the given key.
      * @param key the key to set the values for
@@ -55,8 +53,8 @@ public abstract class Manifest extends Simulator {
      * @param max the maximum amount of values
      * @param allowed the allowed values, if empty all values are allowed
      */
-    protected void validate(@NotNull String key, int min, int max, List<String> allowed) {
-        String[] values = get(key);
+    protected void validate(@NotNull String key, int min, int max, List<Object> allowed) {
+        Object[] values = get(key);
         if (values.length < min) {
             throw new IllegalStateException("Not enough values for " + key + ", expected at least " + min);
         }
@@ -64,7 +62,7 @@ public abstract class Manifest extends Simulator {
             throw new IllegalStateException("Too many values for " + key + ", expected at most " + max);
         }
         if (!allowed.isEmpty()) {
-            for (String value : values) {
+            for (Object value : values) {
                 if (!allowed.contains(value)) {
                     throw new IllegalStateException("Invalid value for " + key + ": " + value);
                 }

@@ -93,7 +93,7 @@ public class Resource {
      * @param key the key to get the values for
      * @return the values for the given key
      */
-    public String[] get(@NotNull String key) {
+    public Object[] get(@NotNull String key) {
         return manifest.get(key);
     }
 
@@ -103,7 +103,7 @@ public class Resource {
      * @param index the index to get the value for
      * @return the value for the given key at the given index
      */
-    public String get(@NotNull String key, int index) {
+    public Object get(@NotNull String key, int index) {
         if (index >= manifest.get(key).length)
             return null;
         return manifest.get(key)[index];
@@ -116,7 +116,7 @@ public class Resource {
      * @return the name of this resource
      */
     public String getName() {
-        String name = get("name", 0);
+        String name = (String) get("name", 0);
         if (name == null)
             name = path.substring(path.lastIndexOf("/") + 1);
         return name;
