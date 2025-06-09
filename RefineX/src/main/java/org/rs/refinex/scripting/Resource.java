@@ -61,7 +61,8 @@ public class Resource {
             throw new RuntimeException("No language found for extension: " + extension);
         Language lang = language.get();
         Environment environment = manifest.createEnvironment("manifest", lang, this);
-        environment.loadfile(path + "/" + simulation.getContext().manifestName());
+        String toml = FileUtils.readFile(path + "/" + simulation.getContext().manifestName());
+        environment.load(toml);
         manifest.validate();
     }
 

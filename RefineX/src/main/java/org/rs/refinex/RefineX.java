@@ -92,8 +92,8 @@ public class RefineX {
         start = System.currentTimeMillis();
         env.loadfile(runnerFile.getAbsolutePath());
 
-        logger.log(LogType.INFO, "Done (took: " + (System.currentTimeMillis() - start) + " ms)", LogSource.here());
         long errors = logger.getLogs().stream().filter(logEntry -> logEntry.type() == LogType.ERROR).count();
+        logger.log(LogType.INFO, "Done (took: " + (System.currentTimeMillis() - start) + " ms) [errors: " + errors + "]", LogSource.here());
         if (errors > 0)
             System.exit(1);
     }

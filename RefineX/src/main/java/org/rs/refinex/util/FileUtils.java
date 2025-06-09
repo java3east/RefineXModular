@@ -63,4 +63,16 @@ public class FileUtils {
         }
         return files;
     }
+
+    public static @NotNull String readFile(@NotNull String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            throw new RuntimeException("File not found: " + path);
+        }
+        try {
+            return java.nio.file.Files.readString(file.toPath());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read file: " + path, e);
+        }
+    }
 }

@@ -18,7 +18,6 @@ public class RESOURCE extends Namespace {
     public static GUID RESOURCE_LOAD(Environment environment, GUID simulationID, String path) {
         Simulation sim = (Simulation) GUID.get(simulationID, Simulation.class);
         Resource resource = sim.load(path);
-        RefineX.logger.log(LogType.INFO, "Resource '" + resource.getName() + "' refreshed.", LogSource.here());
         return GUID.register(resource);
     }
 

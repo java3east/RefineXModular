@@ -31,6 +31,7 @@ class CallFunction extends VarArgFunction {
         try {
             return m.invoke(null, args);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to invoke function '" + m.getName() + "': " + e.getMessage(), e);
         }
     }
