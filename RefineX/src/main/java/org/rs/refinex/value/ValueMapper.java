@@ -152,6 +152,7 @@ public abstract class ValueMapper<T> {
      * @return the mapped object
      */
     public final @NotNull T unmap(final @NotNull Object object) {
+        if (this.clazz.isAssignableFrom(object.getClass())) return (T) object;
         if (object.getClass().isArray()) {
             T[] array = (T[]) Array.newInstance(clazz, Array.getLength(object));
             for (int i = 0; i < array.length; i++) {

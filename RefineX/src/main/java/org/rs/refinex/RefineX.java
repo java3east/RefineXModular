@@ -87,11 +87,10 @@ public class RefineX {
             logger.log(LogType.ERROR, "No Language found to handle extension: " + fileExtension, LogSource.here());
             System.exit(1);
         }
-        String content = read(runnerFile);
         Simulator simulator = simulation.manifest();
         Environment env = simulator.createEnvironment("runner", language.get(), new Resource(simulation, FileUtils.jarDirectory().getAbsolutePath()));
         start = System.currentTimeMillis();
-        env.load(content);
+        env.loadfile(runnerFile.getAbsolutePath());
 
         logger.log(LogType.INFO, "Done (took: " + (System.currentTimeMillis() - start) + " ms)", LogSource.here());
         long errors = logger.getLogs().stream().filter(logEntry -> logEntry.type() == LogType.ERROR).count();

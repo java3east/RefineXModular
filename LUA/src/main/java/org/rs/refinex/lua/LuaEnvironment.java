@@ -56,6 +56,11 @@ public class LuaEnvironment implements Environment {
     }
 
     @Override
+    public Object getGlobal(@NotNull String key) {
+        return this.globals.get(key);
+    }
+
+    @Override
     public void set(@NotNull String key, @NotNull Object value, boolean shared) {
         dataStore.put(key, value);
         if (shared) {

@@ -38,6 +38,11 @@ public class TomlEnvironment implements Environment {
     }
 
     @Override
+    public Object getGlobal(@NotNull String key) {
+        return dataStore.getOrDefault(key, null);
+    }
+
+    @Override
     public void set(@NotNull String key, @NotNull Object value, boolean shared) {
         if (key.equals("title")) {
             set("name", value.toString(), true);

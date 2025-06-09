@@ -2,12 +2,11 @@ package org.rs.refinex.rfx.simulation;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.Manifest;
-import org.rs.refinex.rfx.namespaces.RESOURCE;
-import org.rs.refinex.rfx.namespaces.SIMULATION;
-import org.rs.refinex.rfx.namespaces.SIMULATOR;
+import org.rs.refinex.rfx.namespaces.*;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
+import org.rs.refinex.util.FileUtils;
 
 /**
  * RFX simulator manifest.
@@ -34,6 +33,10 @@ public class RfxSimulator extends Manifest {
         environment.addNamespace(new SIMULATION());
         environment.addNamespace(new SIMULATOR());
         environment.addNamespace(new RESOURCE());
+        environment.addNamespace(new RFX());
+        environment.addNamespace(new ENVIRONMENT());
+        environment.loadfile(FileUtils.jarDirectory() + "/plugins/rfx/lib/test.lua");
+        environment.loadfile(FileUtils.jarDirectory() + "/plugins/rfx/lib/color.lua");
     }
 
     @Override

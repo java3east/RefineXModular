@@ -57,8 +57,8 @@ public class GUID {
      */
     public static @NotNull Object get(GUID guid, Class<?> clazz) {
         Object o = guidMap.get(guid);
-        if (!clazz.isInstance(o)) {
-            throw new ClassCastException("Object is not of type " + clazz.getName());
+        if (o == null || !clazz.isAssignableFrom(o.getClass())) {
+            throw new ClassCastException((o != null ? o.getClass().getName() : "null") + " is not of type " + clazz.getName());
         }
         return o;
     }

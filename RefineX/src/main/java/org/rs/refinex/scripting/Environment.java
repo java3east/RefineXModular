@@ -25,6 +25,13 @@ public interface Environment {
     Optional<Object> get(final @NotNull String key);
 
     /**
+     * Returns the value of the global variable with the given key.
+     * @param key the key to get the value for
+     * @return the value of the global variable, or null if it does not exist
+     */
+    Object getGlobal(final @NotNull String key);
+
+    /**
      * Sets the value for the given key in the data store.
      * @param key the key to set the value for
      * @param value the value to set
