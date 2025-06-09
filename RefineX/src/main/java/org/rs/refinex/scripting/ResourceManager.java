@@ -1,6 +1,9 @@
 package org.rs.refinex.scripting;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.FileUtils;
 
@@ -44,6 +47,7 @@ public class ResourceManager {
                 return resource;
             }
         }
+        RefineX.logger.log(LogType.ERROR, "Could not find resource '" + path + "' at any of the following paths: " + resourcePaths, LogSource.here());
         throw new RuntimeException("Could not find resource: " + path);
     }
 

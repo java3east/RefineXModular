@@ -16,7 +16,7 @@ import org.rs.refinex.util.FileUtils;
 import java.util.*;
 
 public class FiveMSimulatorManager extends SimulatorManager {
-    private static int nextCLID = 1;
+    private int nextCLID = 1;
 
     public FiveMSimulatorManager(@NotNull Simulation simulation) {
         super(simulation);

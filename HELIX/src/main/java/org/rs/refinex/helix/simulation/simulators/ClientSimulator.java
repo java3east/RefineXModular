@@ -1,18 +1,13 @@
 package org.rs.refinex.helix.simulation.simulators;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.guid.GUID;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
 
 public class ClientSimulator extends Simulator {
-    /**
-     * Creates a new simulator for the given simulation.
-     *
-     * @param simulation the simulation this simulator will be created for
-     * @param type
-     */
     public ClientSimulator(@NotNull Simulation simulation) {
         super(simulation, "CLIENT");
     }
@@ -24,7 +19,7 @@ public class ClientSimulator extends Simulator {
 
     @Override
     public @NotNull String getName() {
-        return "";
+        return "CLIENT:" + GUID.register(this).guid;
     }
 
     @Override
