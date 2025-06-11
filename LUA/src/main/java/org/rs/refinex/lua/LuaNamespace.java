@@ -24,7 +24,8 @@ public class LuaNamespace extends Namespace {
                 .replace("^9", LogColor.BOLD.ansi());
 
         RefineX.logger.log(LogType.DEBUG, LogColor.WHITE + "[" + LogColor.RESET +
-                        environment.getSimulator().getName() + LogColor.WHITE + "] " + LogColor.RESET + message.trim(),
+                        environment.getSimulator().getName() + LogColor.WHITE + "] " + LogColor.RESET + message.trim() +
+                        LogColor.RESET,
                 new LogSource(file.replace(environment.getResourcePath(), ""), line)
         );
     }

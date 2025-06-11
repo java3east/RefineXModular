@@ -16,7 +16,23 @@ function Test.assert(condition, message)
     return false
 end
 
-function Test.runAll()
+---@param value any
+---@param acceptedValues any[]
+---@param message string
+---@return boolean passed
+function Test.assertOneOf(value, acceptedValues, message)
+    for _, v in ipairs(acceptedValues) do
+        if value == v then
+            return true
+        end
+    end
+    RFX_ERROR("Test.assertOneOf: " .. (message or "Value not in accepted values"))
+    return false
+end
+
+---@param moduleName string the name of the module
+function Test.runAll(moduleName)
+    print(" ===== " .. Color.MAGENTA .. "Running tests for module: " .. Color.BOLD .. "'" .. moduleName .. "'" .. Color.RESET .. " ==== ")
     for _, test in ipairs(tests) do
         test:run()
     end
