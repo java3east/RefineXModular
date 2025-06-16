@@ -16,6 +16,14 @@ function Test.assert(condition, message)
     return false
 end
 
+function Test.assertEqual(a, b, message)
+    if a == b then
+        return true
+    end
+    RFX_ERROR("Test.assertEqual: " .. (message or "Values are not equal") .. " (" .. tostring(a) .. " != " .. tostring(b) .. ")")
+    return false
+end
+
 ---@param value any
 ---@param acceptedValues any[]
 ---@param message string

@@ -47,4 +47,12 @@ public class ServerEvents {
         new ContextEvent(environment.currentSource(), event, environment, player.client(), args)
                 .dispatch(false);
     }
+
+    @ExportFunction
+    public static void BroadcastRemote(Environment environment, String event, Varargs args) {
+        for (Simulator simulator : environment.getSimulator().getSimulation().getSimulator("CLIENT")) {
+            new ContextEvent(environment.currentSource(), event, environment, simulator, args)
+                    .dispatch(false);
+        }
+    }
 }

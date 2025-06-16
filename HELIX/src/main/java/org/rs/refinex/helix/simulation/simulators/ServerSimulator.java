@@ -1,14 +1,19 @@
 package org.rs.refinex.helix.simulation.simulators;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.RefineX;
+import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.helix.obj.Package;
 import org.rs.refinex.helix.obj.Player;
+import org.rs.refinex.helix.obj.Server;
 import org.rs.refinex.helix.obj.ServerEvents;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
-import org.rs.refinex.util.FileUtils;
+import org.rs.refinex.value.Varargs;
 
 public class ServerSimulator extends Simulator {
     /**
@@ -25,6 +30,7 @@ public class ServerSimulator extends Simulator {
         environment.addStaticFunctionInterface("Player", Player.class);
         environment.addStaticFunctionInterface("Package", Package.class);
         environment.addStaticFunctionInterface("Events", ServerEvents.class);
+        environment.addStaticFunctionInterface("Server", Server.class);
     }
 
     @Override
@@ -39,6 +45,9 @@ public class ServerSimulator extends Simulator {
 
     @Override
     public void onResourceStart(@NotNull Resource resource) {
-
+        Environment environment = this.getEnvironment("LUA_" + resource.getName());
+        environment.dispatchEvent(
+            new ContextEvent(LogSource.here(), "Start", null, this, Varargs.of())
+        );
     }
 }
