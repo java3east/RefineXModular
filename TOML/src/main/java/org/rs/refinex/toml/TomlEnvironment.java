@@ -7,12 +7,15 @@ import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.context.Namespace;
+import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
+import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.FileUtils;
+import org.rs.refinex.value.Function;
 
 import java.io.File;
 import java.util.*;
@@ -90,6 +93,21 @@ public class TomlEnvironment implements Environment {
     }
 
     @Override
+    public long functionReference(@NotNull Function function) {
+        return 0;
+    }
+
+    @Override
+    public Function getFunctionReference(long refId) {
+        return null;
+    }
+
+    @Override
+    public Object envTypeFunctionalObject(Object obj, boolean isStatic) {
+        return obj;
+    }
+
+    @Override
     public void addEventHandler(@NotNull ContextEventHandler handler) { }
 
     @Override
@@ -123,5 +141,10 @@ public class TomlEnvironment implements Environment {
     @Override
     public @NotNull Resource getResource() {
         return this.resource;
+    }
+
+    @Override
+    public Language getLanguage() {
+        return LanguageManager.getLanguage("TOML");
     }
 }

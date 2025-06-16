@@ -1,6 +1,7 @@
 package org.rs.refinex.value;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.scripting.Environment;
 
 /**
  * Maps an object to a specific type.
@@ -12,5 +13,5 @@ public interface ObjectMapper<A> {
      * @param value the object to be mapped
      * @return the mapped object
      */
-    A map(@NotNull Object value);
+    A map(@NotNull Object value, Environment environment);
 }

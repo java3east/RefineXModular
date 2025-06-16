@@ -51,17 +51,18 @@ class CallFunction extends VarArgFunction {
             Method m = environment.getFunction(funName);
             Object[] args = new Object[m.getParameterCount()];
             LuaValueMapper mapper = new LuaValueMapper();
-            LuaValue[] luaArgs = new LuaValue[args.length - 1];
-            for (int i = 1; i < args.length; i++) {
-                luaArgs[i - 1] = varargs.arg(i + 1);
+            LuaValue[] luaArgs = new LuaValue[varargs.narg()];
+            for (int i = 1; i < varargs.narg(); i++) {
+                luaArgs[i] = varargs.arg(i + 1);
             }
-            Object[] mappedArgs = mapper.match(luaArgs, m.getParameterTypes());
+            Object[] mappedArgs = mapper.match(luaArgs, m.getParameterTypes(), environment);
             args[0] = environment;
             System.arraycopy(mappedArgs, 0, args, 1, mappedArgs.length);
             RefineX.manager.dispatchEvent(new NativeCallEvent(environment, funName, args));
             Object result = invoke(m, args);
             if (result == null) return LuaValue.NIL;
-            return mapper.unmap(result);
+            LuaValue v = mapper.unmap(result, environment);
+            return v;
         } catch (Exception e) {
             RefineX.logger.log(LogType.ERROR, e.getMessage() + " [" + e.getClass() + "]", environment.currentSource());
             e.printStackTrace();

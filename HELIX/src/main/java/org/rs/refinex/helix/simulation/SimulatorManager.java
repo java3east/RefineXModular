@@ -1,12 +1,18 @@
 package org.rs.refinex.helix.simulation;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.context.ContextEvent;
+import org.rs.refinex.guid.GUID;
+import org.rs.refinex.helix.obj.Player;
+import org.rs.refinex.helix.simulation.simulators.ClientSimulator;
 import org.rs.refinex.language.LanguageManager;
+import org.rs.refinex.log.LogSource;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.value.Varargs;
 
 public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager {
     private int nextCLID = 1;
@@ -40,6 +46,10 @@ public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager
             simulator.setData("server_id", 0);
         } else {
             simulator.setData("server_id", nextCLID++);
+            Simulator server = simulator.getSimulation().getSimulator("SERVER")[0];
+            simulator.setData("server", server);
+            new ContextEvent(LogSource.here(), "Spawn", null, server, Varargs.of(new Player((ClientSimulator) simulator)))
+                    .set("type", "PLAYER").dispatch(true);
         }
     }
 }

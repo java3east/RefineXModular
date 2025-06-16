@@ -21,10 +21,10 @@ public class FiveMEventHandler extends ContextEventHandler {
     public void handle(@NotNull ContextEvent event) {
         boolean eventIsNet = event.source() != null && event.source().getSimulator() != event.target();
         if (eventIsNet && !isNet) {
-            RefineX.logger.log(LogType.WARNING, "Event handler is not a network event handler, but received a network event", this.source());
+            RefineX.logger.log(LogType.WARNING, "Event handler is not a network event handler, but received a network event", source());
             return;
         } else if (!eventIsNet && isNet) {
-            RefineX.logger.log(LogType.WARNING, "Event handler is a network event handler, but received a non-network event", this.source());
+            RefineX.logger.log(LogType.WARNING, "Event handler is a network event handler, but received a non-network event", source());
             return;
         }
 

@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Native { }
+public @interface Native {
+    String[] simulatorType() default { "ALL" };
+}

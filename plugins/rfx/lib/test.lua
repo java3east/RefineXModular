@@ -32,14 +32,18 @@ end
 
 ---@param moduleName string the name of the module
 function Test.runAll(moduleName)
-    print(" ===== " .. Color.MAGENTA .. "Running tests for module: " .. Color.BOLD .. "'" .. moduleName .. "'" .. Color.RESET .. " ==== ")
     for _, test in ipairs(tests) do
         test:run()
     end
+    local total = 0
+    local ok = 0
     for _, test in ipairs(tests) do
         print("    [" .. (test.passed and "✔️" or "❌") .. "] " .. (test.passed and Color.GREEN or Color.RED) .. tostring(test.name))
+        ok = ok + (test.passed and 1 or 0)
+        total = total + 1
     end
     tests = {}
+    print(" ===== " .. Color.MAGENTA .. "Tests completed: " .. Color.BOLD .. ok .. "/" .. total .. Color.RESET .. Color.MAGENTA .. " successful" .. Color.RESET .. " ==== ")
 end
 
 ---@param name string the name of the test

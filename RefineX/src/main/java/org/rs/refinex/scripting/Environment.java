@@ -4,8 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
+import org.rs.refinex.guid.GUID;
 import org.rs.refinex.log.LogSource;
+import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulator;
+import org.rs.refinex.value.Function;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -45,6 +48,11 @@ public interface Environment {
      */
     void addNamespace(final @NotNull Namespace namespace);
 
+    default void addStaticFunctionInterface(String name, final @NotNull Class<?> clazz) {
+        Object val = getLanguage().getValueMapper().staticFunctionInterface(clazz, this);
+        set(name, val, true);
+    }
+
     /**
      * Loads the given string into the environment.
      * @param str the string to load
@@ -56,6 +64,12 @@ public interface Environment {
      * @param path the path to the file to load
      */
     void loadfile(final @NotNull String path);
+
+    long functionReference(final @NotNull Function function);
+
+    Function getFunctionReference(final long refId);
+
+    Object envTypeFunctionalObject(Object obj, boolean isStatic);
 
     void addEventHandler(final @NotNull ContextEventHandler handler);
 
@@ -88,6 +102,8 @@ public interface Environment {
      * @return the resource
      */
      @NotNull Resource getResource();
+
+     Language getLanguage();
 
     /**
      * Returns the function with the given name.

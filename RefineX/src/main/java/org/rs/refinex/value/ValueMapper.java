@@ -2,15 +2,17 @@ package org.rs.refinex.value;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.RefineX;
+import org.rs.refinex.guid.FunctionReference;
+import org.rs.refinex.guid.GUID;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
+import org.rs.refinex.scripting.Environment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -21,15 +23,23 @@ public abstract class ValueMapper<T> {
     private final HashMap<Class<?>, List<Mapping>> mappers = new HashMap<>();
     private final Class<?> clazz;
 
-    private @NotNull Object objMap(final @NotNull Map<String, T> map, final @NotNull Class<?> clazz) {
+    private @NotNull Object objMap(final @NotNull Map<String, T> map, final @NotNull Class<?> clazz, Environment environment) {
+        if (map.containsKey("__guid__")) {
+            long guid = getLongMapper().map(map.get("__guid__"), environment);
+            GUID gid = new GUID();
+            gid.guid = guid;
+            return GUID.get(gid, clazz);
+        }
         try {
             Object instance = clazz.getConstructor().newInstance();
             for (String key : map.keySet()) {
                 T value = map.get(key);
-                Field field = clazz.getField(key);
-                ObjectMapper<?> mapper = getMapper(field.getType(), value.getClass(), false);
-                Object mappedValue = mapper.map(value);
-                field.set(instance, mappedValue);
+                try {
+                    Field field = clazz.getField(key);
+                    ObjectMapper<?> mapper = getMapper(field.getType(), value.getClass(), false, environment);
+                    Object mappedValue = mapper.map(value, environment);
+                    field.set(instance, mappedValue);
+                } catch (NoSuchFieldException ignored){ }
             }
             return instance;
         } catch (Exception e) {
@@ -37,14 +47,49 @@ public abstract class ValueMapper<T> {
         }
     }
 
-    private @NotNull Object objUnmap(final @NotNull Object object) {
+    public Object staticFunctionInterface(final @NotNull Class<?> clazz, Environment environment) {
+        try {
+            Map<String, T> map = new HashMap<>();
+            for (Method method : clazz.getMethods()) {
+                if (method.getAnnotation(ExportFunction.class) != null) {
+                    boolean isStatic = Modifier.isStatic(method.getModifiers());
+                    if (!isStatic) continue;
+                    Function fun = Function.of(null, method, environment);
+                    String name = method.getName();
+                    long ref = environment.functionReference(fun);
+                    FunctionReference reference = new FunctionReference();
+                    reference.__RFXREF__ = ref;
+                    map.put(name, (T) objUnmap(reference, environment));
+                }
+            }
+            return map;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private @NotNull Object objUnmap(final @NotNull Object object, Environment environment) {
+        if (this.clazz.isAssignableFrom(object.getClass())) {
+            return object;
+        }
         try {
             Map<String, T> map = new HashMap<>();
             for (Field field : object.getClass().getFields()) {
                 Object value = field.get(object);
-                ObjectMapper<T> unmapper = (ObjectMapper<T>) getMapper(clazz, value.getClass(), true);
-                T mappedValue = unmapper.map(value);
+                ObjectMapper<T> unmapper = (ObjectMapper<T>) getMapper(clazz, value.getClass(), true, environment);
+                T mappedValue = unmapper.map(value, environment);
                 map.put(field.getName(), mappedValue);
+            }
+            for (Method method : object.getClass().getMethods()) {
+                if (method.getAnnotation(ExportFunction.class) != null) {
+                    boolean isStatic = Modifier.isStatic(method.getModifiers());
+                    Function fun = Function.of(isStatic ? null : object, method, environment);
+                    String name = method.getName();
+                    long ref = environment.functionReference(fun);
+                    FunctionReference reference = new FunctionReference();
+                    reference.__RFXREF__ = ref;
+                    map.put(name, (T) objUnmap(reference, environment));
+                }
             }
             return map;
         } catch (Exception e) {
@@ -59,13 +104,13 @@ public abstract class ValueMapper<T> {
         mappers.get(to).add(new Mapping(from, mapper));
     }
 
-    private @NotNull ObjectMapper<?> getMapper(final @NotNull Class<?> to, final @NotNull Class<?> from, boolean unmap) {
+    private @NotNull ObjectMapper<?> getMapper(final @NotNull Class<?> to, final @NotNull Class<?> from, boolean unmap, Environment environment) {
         List<Mapping> mappings = mappers.get(to);
         if (mappings == null)
             if (unmap)
-                return (ObjectMapper<Object>) value -> getMapUnmapper().map(ValueMapper.this.objUnmap(value));
+                return (ObjectMapper<Object>) (value, env) -> getMapUnmapper().map(ValueMapper.this.objUnmap(value, env), env);
             else
-                return (ObjectMapper<Object>) value -> ValueMapper.this.objMap(ValueMapper.this.getMapMapper().map(value), to);
+                return (ObjectMapper<Object>) (value, env) -> ValueMapper.this.objMap(ValueMapper.this.getMapMapper().map(value, env), to, env);
 
         for (Mapping mapping : mappings) {
             if (mapping.clazz().isAssignableFrom(from)) {
@@ -74,18 +119,18 @@ public abstract class ValueMapper<T> {
         }
 
         if (unmap)
-            return (ObjectMapper<Object>) value -> getMapUnmapper().map(ValueMapper.this.objUnmap(value));
+            return (ObjectMapper<Object>) (value, env) -> getMapUnmapper().map(ValueMapper.this.objUnmap(value, env), env);
         else
-            return (ObjectMapper<Object>) value -> ValueMapper.this.objMap(ValueMapper.this.getMapMapper().map(value), to);
+            return (ObjectMapper<Object>) (value, env) -> ValueMapper.this.objMap(ValueMapper.this.getMapMapper().map(value, env), to, env);
     }
 
-    private @NotNull Object arrayMap(final @NotNull T[] array, final @NotNull Class<?> clazz) {
+    private @NotNull Object arrayMap(final @NotNull T[] array, final @NotNull Class<?> clazz, Environment environment) {
         try {
             Object instance = Array.newInstance(clazz.getComponentType(), array.length);
             for (int i = 0; i < array.length; i++) {
                 Object value = array[i];
-                ObjectMapper<?> mapper = getMapper(clazz.getComponentType(), value.getClass(), false);
-                Object mappedValue = mapper.map(value);
+                ObjectMapper<?> mapper = getMapper(clazz.getComponentType(), value.getClass(), false, environment);
+                Object mappedValue = mapper.map(value, environment);
                 Array.set(instance, i, mappedValue);
             }
             return instance;
@@ -137,56 +182,66 @@ public abstract class ValueMapper<T> {
      * @param clazz the class to map to
      * @return the mapped object
      */
-    public final @NotNull Object map(final @NotNull T object, final @NotNull Class<?> clazz) {
+    public final @NotNull Object map(final @NotNull T object, final @NotNull Class<?> clazz, Environment environment) {
         if (clazz.isArray()) {
-            T[] array = getArrayMapper().map(object);
-            return arrayMap((T[]) array, clazz);
+            T[] array = getArrayMapper().map(object, environment);
+            return arrayMap((T[]) array, clazz, environment);
         }
-        ObjectMapper<?> mapper = getMapper(clazz, object.getClass(), false);
-        return mapper.map(object);
+        ObjectMapper<?> mapper = getMapper(clazz, object.getClass(), false, environment);
+        return mapper.map(object, environment);
     }
+
+    protected abstract Object unmapVarargs(Varargs varargs, Environment environment);
 
     /**
      * Maps the given object to the class of this ValueMapper.
      * @param object the object to map
      * @return the mapped object
      */
-    public final @NotNull T unmap(final @NotNull Object object) {
+    public final @NotNull T unmap(@NotNull Object object, final @NotNull Environment environment) {
+        if (object instanceof Varargs v) object = unmapVarargs(v, environment);
         if (this.clazz.isAssignableFrom(object.getClass())) return (T) object;
         if (object.getClass().isArray()) {
             T[] array = (T[]) Array.newInstance(clazz, Array.getLength(object));
             for (int i = 0; i < array.length; i++) {
                 Object value = Array.get(object, i);
-                ObjectMapper<?> mapper = getMapper(clazz, value.getClass(), true);
-                array[i] = (T) mapper.map(value);
+                ObjectMapper<?> mapper = getMapper(clazz, value.getClass(), true, environment);
+                array[i] = (T) mapper.map(value, environment);
             }
-            return getArrayUnmapper().map(array);
+            T t = getArrayUnmapper().map(array, environment);
+            t = (T) environment.envTypeFunctionalObject(t, true);
+            return t;
         }
-        ObjectMapper<T> unmapper = (ObjectMapper<T>) getMapper(clazz, object.getClass(), true);
-        return unmapper.map(object);
+        ObjectMapper<T> unmapper = (ObjectMapper<T>) getMapper(clazz, object.getClass(), true, environment);
+        T t = unmapper.map(object, environment);
+        t = (T) environment.envTypeFunctionalObject(t, true);
+        return t;
     }
 
-    public final @NotNull Object[] match(final @NotNull T[] in, final @NotNull Class<?>[] clazz) {
-        Object[] out = new Object[in.length];
-        for (int i = 0; i < in.length; i++) {
-            T value = in[i];
-            Class<?> targetClass = clazz[i + 1];
+    public final @NotNull Object[] match(final @NotNull Object[] in, final @NotNull Class<?>[] clazz, Environment environment, boolean ignoreObject) {
+        Object[] out = new Object[clazz.length - (ignoreObject ? 1 : 0)];
+        for (int i = ignoreObject ? 1 : 0; i < clazz.length; i++) {
+            T value = (T) in[i];
+            Class<?> targetClass = clazz[i];
             if (Varargs.class.isAssignableFrom(targetClass)) {
                 T[] varargs = (T[]) Array.newInstance(this.clazz, in.length - i);
                 System.arraycopy(in, i, varargs, 0, in.length - i);
-                out[i] = new Varargs(varargs);
+                out[i - (ignoreObject ? 1 : 0)] = new Varargs(varargs);
                 i = in.length;
             } else if (isNull(value)) {
-                out[i] = null;
-                continue;
+                out[i - (ignoreObject ? 1 : 0)] = null;
             }else if (targetClass.isArray()) {
-                out[i] = arrayMap(getArrayMapper().map(value), targetClass);
+                out[i - (ignoreObject ? 1 : 0)] = arrayMap(getArrayMapper().map(value, environment), targetClass, environment);
             } else {
-                ObjectMapper<?> mapper = getMapper(targetClass, value.getClass(), false);
-                out[i] = mapper.map(value);
+                ObjectMapper<?> mapper = getMapper(targetClass, value.getClass(), false, environment);
+                out[i - (ignoreObject ? 1 : 0)] = mapper.map(value, environment);
             }
         }
         return out;
+    }
+
+    public final @NotNull Object[] match(final @NotNull Object[] in, final @NotNull Class<?>[] clazz, Environment environment) {
+        return match(in, clazz, environment, true);
     }
 
     public abstract boolean isNull(final @NotNull T object);

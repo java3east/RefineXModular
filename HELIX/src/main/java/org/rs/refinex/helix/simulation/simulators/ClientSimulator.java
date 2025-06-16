@@ -2,7 +2,8 @@ package org.rs.refinex.helix.simulation.simulators;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.guid.GUID;
-import org.rs.refinex.helix.namespace.PACKAGE;
+import org.rs.refinex.helix.obj.ClientEvents;
+import org.rs.refinex.helix.obj.Package;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
@@ -16,8 +17,8 @@ public class ClientSimulator extends Simulator {
 
     @Override
     protected void addNamespaces(@NotNull Environment environment) {
-        environment.addNamespace(new PACKAGE());
-        environment.loadfile(FileUtils.jarDirectory() + "/plugins/helix/lib/shared/package.lua");
+        environment.addStaticFunctionInterface("Events", ClientEvents.class);
+        environment.addStaticFunctionInterface("Package", Package.class);
     }
 
     @Override

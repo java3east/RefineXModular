@@ -1,6 +1,7 @@
 package org.rs.refinex.toml;
 
 import org.jetbrains.annotations.NotNull;
+import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
 import org.rs.refinex.value.ValueMapper;
@@ -14,102 +15,107 @@ public class TomlValueMapper extends ValueMapper<Object> {
     }
 
     @Override
+    protected Object unmapVarargs(Varargs varargs, Environment environment) {
+        return null;
+    }
+
+    @Override
     public boolean isNull(@NotNull Object object) {
         return false;
     }
 
     @Override
     public ObjectMapper<Integer> getIntegerMapper() {
-        return value -> (Integer)  value;
+        return (value, env) -> (Integer)  value;
     }
 
     @Override
     public ObjectMapper<Long> getLongMapper() {
-        return value -> (Long) value;
+        return (value, env) -> (Long) value;
     }
 
     @Override
     public ObjectMapper<Float> getFloatMapper() {
-        return value -> (Float) value;
+        return (value, env) -> (Float) value;
     }
 
     @Override
     public ObjectMapper<Double> getDoubleMapper() {
-        return value -> (Double) value;
+        return (value, env) -> (Double) value;
     }
 
     @Override
     public ObjectMapper<String> getStringMapper() {
-        return value -> (String) value;
+        return (value, env) -> (String) value;
     }
 
     @Override
     public ObjectMapper<Boolean> getBooleanMapper() {
-        return value -> (Boolean) value;
+        return (value, env) -> (Boolean) value;
     }
 
     @Override
     public ObjectMapper<Map<String, Object>> getMapMapper() {
-        return value -> (Map<String, Object>) value;
+        return (value, env) -> (Map<String, Object>) value;
     }
 
     @Override
     public ObjectMapper<Object[]> getArrayMapper() {
-        return value -> (Object[]) value;
+        return (value, env) -> (Object[]) value;
     }
 
     @Override
     public ObjectMapper<Function> getFunctionMapper() {
-        return value -> (Function) value;
+        return (value, env) -> (Function) value;
     }
 
     @Override
     public ObjectMapper<Varargs> getVarargsMapper() {
-        return value -> (Varargs) value;
+        return (value, env) -> (Varargs) value;
     }
 
     @Override
     public ObjectMapper<Object> getIntegerUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getLongUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getFloatUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getDoubleUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getStringUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getBooleanUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getMapUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getArrayUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 
     @Override
     public ObjectMapper<Object> getFunctionUnmapper() {
-        return value -> value;
+        return (value, env) -> value;
     }
 }

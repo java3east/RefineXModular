@@ -7,6 +7,9 @@ import org.rs.refinex.log.LogColor;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.value.Varargs;
+
+import java.util.Arrays;
 
 public class LuaNamespace extends Namespace {
     @Native
@@ -28,5 +31,10 @@ public class LuaNamespace extends Namespace {
                         LogColor.RESET,
                 new LogSource(file.replace(environment.getResourcePath(), ""), line)
         );
+    }
+
+    @Native
+    public static Varargs RFXREF(Environment environment, Long referenceId, Varargs varargs) {
+        return environment.getFunctionReference(referenceId).invoke(varargs);
     }
 }

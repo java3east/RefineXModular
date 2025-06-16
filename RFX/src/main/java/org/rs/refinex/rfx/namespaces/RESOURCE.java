@@ -25,6 +25,5 @@ public class RESOURCE extends Namespace {
     public static void RESOURCE_START(Environment environment, GUID resourceID) {
         Resource resource = (Resource) GUID.get(resourceID, Resource.class);
         resource.start();
-        RefineX.logger.log(LogType.INFO, "Resource '" + resource.getName() + "' started.", LogSource.here());
     }
 }

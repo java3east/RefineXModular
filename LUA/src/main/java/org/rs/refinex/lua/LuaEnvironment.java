@@ -9,12 +9,15 @@ import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
+import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
+import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.FileUtils;
+import org.rs.refinex.value.Function;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +35,9 @@ public class LuaEnvironment implements Environment {
     private final List<Namespace> namespaces = new ArrayList<>();
     private final HashMap<String, List<ContextEventHandler>> eventHandlers = new HashMap<>();
     private final HashMap<String, Object> dataStore = new HashMap<>();
+    private final HashMap<Long, Function> functionReferences = new HashMap<>();
+
+    private long nextRefId = 1;
 
     /**
      * Creates a new Lua environment with the given simulator.
@@ -64,7 +70,7 @@ public class LuaEnvironment implements Environment {
     public void set(@NotNull String key, @NotNull Object value, boolean shared) {
         dataStore.put(key, value);
         if (shared) {
-            globals.set(key, new LuaValueMapper().unmap(value));
+            globals.set(key, new LuaValueMapper().unmap(value, this));
         }
     }
 
@@ -94,6 +100,24 @@ public class LuaEnvironment implements Environment {
     }
 
     @Override
+    public long functionReference(@NotNull Function function) {
+        long id = nextRefId++;
+        functionReferences.put(id, function);
+        return id;
+    }
+
+    @Override
+    public Function getFunctionReference(long refId) {
+        return functionReferences.get(refId);
+    }
+
+    @Override
+    public Object envTypeFunctionalObject(Object obj, boolean isStatic) {
+        LuaValue value = (LuaValue) obj;
+        return this.globals.get("__ref").call(value, LuaValue.valueOf(isStatic));
+    }
+
+    @Override
     public void addEventHandler(@NotNull ContextEventHandler handler) {
         List<ContextEventHandler> handlers = eventHandlers.getOrDefault(handler.name(), new ArrayList<>());
         handlers.add(handler);
@@ -109,6 +133,7 @@ public class LuaEnvironment implements Environment {
             try {
                 handler.handle(event);
             } catch (Exception e) {
+                e.printStackTrace();
                 RefineX.logger.log(LogType.ERROR, "Error during event handling for " + event.name() + ": "
                         + e.getMessage(), currentSource());
             }
@@ -132,9 +157,13 @@ public class LuaEnvironment implements Environment {
 
     @Override
     public @NotNull LogSource currentSource() {
-        LuaTable tbl = globals.get("debug").checktable();
-        LuaTable info = tbl.get("getinfo").invoke(LuaValue.valueOf("1"), LuaValue.valueOf("Sl")).checktable(1);
-        return new LogSource(info.get("short_src").tojstring(), info.get("currentline").toint());
+        try {
+            LuaTable tbl = globals.get("debug").checktable();
+            LuaTable info = tbl.get("getinfo").invoke(LuaValue.valueOf("1"), LuaValue.valueOf("Sl")).checktable(1);
+            return new LogSource(info.get("short_src").tojstring(), info.get("currentline").toint());
+        } catch(Exception e) {
+            return new LogSource("?", -1);
+        }
     }
 
     @Override
@@ -155,5 +184,10 @@ public class LuaEnvironment implements Environment {
     @Override
     public @NotNull Resource getResource() {
         return this.resource;
+    }
+
+    @Override
+    public Language getLanguage() {
+        return LanguageManager.getLanguage("LUA");
     }
 }
