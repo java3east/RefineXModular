@@ -20,7 +20,7 @@ function Test.assertEqual(a, b, message)
     if a == b then
         return true
     end
-    RFX_ERROR("Test.assertEqual: " .. (message or "Values are not equal") .. " (" .. tostring(a) .. " != " .. tostring(b) .. ")")
+    RFX_ERROR("Test.assertEqual: " .. (message or "Values are not equal") .. " (got: " .. tostring(a) .. ", expected: " .. tostring(b) .. ")")
     return false
 end
 
