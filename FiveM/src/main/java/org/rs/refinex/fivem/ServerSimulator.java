@@ -45,4 +45,9 @@ public class ServerSimulator extends Simulator {
         new ContextEvent(LogSource.here(), "onServerResourceStart", null, this, Varargs.of(resource.getName())).queue();
         new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch(true);
     }
+
+    @Override
+    public boolean destroy() {
+        return false;
+    }
 }

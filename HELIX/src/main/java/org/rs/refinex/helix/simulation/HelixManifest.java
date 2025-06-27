@@ -64,4 +64,9 @@ public class HelixManifest extends Manifest {
     public void onResourceStart(@NotNull Resource resource) {
 
     }
+
+    @Override
+    public boolean destroy() {
+        return false;
+    }
 }

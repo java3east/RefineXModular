@@ -61,4 +61,11 @@ public class ClientSimulator extends Simulator {
         new ContextEvent(LogSource.here(), "onClientResourceStart", null, this, Varargs.of(resource.getName())).queue();
         new ContextEvent(LogSource.here(), "onResourceStart", null, this, Varargs.of(resource.getName())).dispatch(true);
     }
+
+    @Override
+    public boolean destroy() {
+        new ContextEvent(LogSource.here(), "onClientSimulatorDestroy", null, this, Varargs.of()).dispatch(true);
+        GUID.destroy(this);
+        return true;
+    }
 }

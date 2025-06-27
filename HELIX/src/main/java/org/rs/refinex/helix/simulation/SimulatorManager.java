@@ -48,7 +48,8 @@ public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager
             simulator.setData("server_id", nextCLID++);
             Simulator server = simulator.getSimulation().getSimulator("SERVER")[0];
             simulator.setData("server", server);
-            new ContextEvent(LogSource.here(), "Spawn", null, server, Varargs.of(new Player((ClientSimulator) simulator)))
+            ClientSimulator clientSimulator = (ClientSimulator) simulator;
+            new ContextEvent(LogSource.here(), "Spawn", null, server, Varargs.of(clientSimulator.getPlayer()))
                     .set("type", "PLAYER").dispatch(true);
         }
     }

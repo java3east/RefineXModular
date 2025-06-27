@@ -23,4 +23,10 @@ public class SIMULATOR extends Namespace {
         Simulator sim = (Simulator) GUID.get(simulatorID, Simulator.class);
         sim.tick(ms / 1000.0);
     }
+
+    @Native
+    public static void SIMULATOR_DESTROY(Environment environment, GUID simulatorID) {
+        Simulator sim = (Simulator) GUID.get(simulatorID, Simulator.class);
+        sim.destroy();
+    }
 }

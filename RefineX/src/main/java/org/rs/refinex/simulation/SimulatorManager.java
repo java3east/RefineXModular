@@ -54,4 +54,14 @@ public abstract class SimulatorManager {
             }
         }
     }
+
+    public void destroySimulator(final @NotNull Simulator simulator) {
+        if (!simulator.destroy())
+            return;
+        List<Simulator> simulators = this.simulators.get(simulator.getType());
+        if (simulators == null || simulators.isEmpty())
+            return;
+
+        simulators.remove(simulator);
+    }
 }

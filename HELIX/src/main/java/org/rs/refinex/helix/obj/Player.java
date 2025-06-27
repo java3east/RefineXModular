@@ -41,7 +41,7 @@ public class Player extends Referencable {
     }
 
     @ExportFunction
-    public String getIdentifier(Environment environment) {
+    public String GetIdentifier(Environment environment) {
         return this.identifier;
     }
 

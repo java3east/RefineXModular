@@ -1,11 +1,8 @@
 package org.rs.refinex.value;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.RefineX;
 import org.rs.refinex.guid.FunctionReference;
 import org.rs.refinex.guid.GUID;
-import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 
 import java.lang.reflect.Array;
@@ -13,7 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Responsible for mapping objects to a specific type.
@@ -159,6 +155,7 @@ public abstract class ValueMapper<T> {
         register(Map.class, clazz, getMapMapper());
         register(Object[].class, clazz, getArrayMapper());
         register(Function.class, clazz, getFunctionMapper());
+        register(Any.class, clazz, (value, environment) -> new Any(value));
 
         register(clazz, Integer.class, getIntegerUnmapper());
         register(clazz, int.class, getIntegerUnmapper());
@@ -174,6 +171,7 @@ public abstract class ValueMapper<T> {
         register(clazz, Map.class, getMapUnmapper());
         register(clazz, Object[].class, getArrayUnmapper());
         register(clazz, Function.class, getFunctionUnmapper());
+        register(clazz, Any.class, (value, environment) -> ((Any) value).o());
     }
 
     /**

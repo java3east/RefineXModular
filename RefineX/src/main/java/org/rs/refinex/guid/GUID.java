@@ -31,6 +31,17 @@ public class GUID {
     private static final HashMap<Object, GUID> objectMap = new HashMap<>();
 
     /**
+     * Removes the object and its associated GUID from the system.
+     * @param o the object to destroy
+     */
+    public static void destroy(Object o) {
+        if (o == null || !objectMap.containsKey(o))
+            return;
+        GUID guid = objectMap.remove(o);
+        guidMap.remove(guid);
+    }
+
+    /**
      * Registers a new object. This will create a new GUID and associate it with the object.
      * @param o the object to register
      * @return the GUID associated with the object

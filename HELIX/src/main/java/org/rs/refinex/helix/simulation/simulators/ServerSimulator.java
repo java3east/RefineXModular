@@ -50,4 +50,9 @@ public class ServerSimulator extends Simulator {
             new ContextEvent(LogSource.here(), "Start", null, this, Varargs.of())
         );
     }
+
+    @Override
+    public boolean destroy() {
+        return false;
+    }
 }

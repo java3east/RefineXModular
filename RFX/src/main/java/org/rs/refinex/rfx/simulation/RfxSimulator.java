@@ -51,4 +51,9 @@ public class RfxSimulator extends Manifest {
 
     @Override
     public void onResourceStart(@NotNull Resource resource) { }
+
+    @Override
+    public boolean destroy() {
+        return false;
+    }
 }

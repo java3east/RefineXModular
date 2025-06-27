@@ -16,9 +16,40 @@ function Test.assert(condition, message)
     return false
 end
 
+local function tableEqual(t1, t2)
+    if #t1 ~= #t2 then return false end
+    for k, v in pairs(t1) do
+        if type(v) == "table" then
+            if not tableEqual(v, t2[k]) then return false end
+        elseif v ~= t2[k] then
+            return false
+        end
+    end
+    return true
+end
+
+local function tableStr(t)
+    local str = "{"
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            str = str .. k .. "=" .. tableStr(v) .. ", "
+        else
+            str = str .. k .. "=" .. tostring(v) .. ", "
+        end
+    end
+    return str:sub(1, -3) .. "}"
+end
+
 function Test.assertEqual(a, b, message)
     if a == b then
         return true
+    end
+    if type(a) == "table" and type(b) == "table" then
+        if tableEqual(a, b) then
+            return true
+        end
+        RFX_ERROR("Test.assertEqual: " .. (message or "Tables are not equal") .. " (got: " .. tableStr(a) .. ", expected: " .. tableStr(b) .. ")")
+        return false
     end
     RFX_ERROR("Test.assertEqual: " .. (message or "Values are not equal") .. " (got: " .. tostring(a) .. ", expected: " .. tostring(b) .. ")")
     return false

@@ -84,6 +84,16 @@ public abstract class Simulator {
     public abstract void onResourceStart(final @NotNull Resource resource);
 
     /**
+     * This method is called when the simulator should be destroyed.
+     * It should clean up all resources and environments, as well as disconnect
+     * this simulator from the simulation.
+     * It is allowed to reject the destruction, in case this is a SERVER simulator
+     * or similar.
+     * @return true if the simulator was destroyed successfully, false otherwise
+     */
+    public abstract boolean destroy();
+
+    /**
      * Creates a new environment that should be bound to this simulator.
      * This will also register the environment in this simulator, so it can be
      * retrieved later with {@link #getEnvironment(String)}
