@@ -1,7 +1,10 @@
 package org.rs.refinex.helix.obj;
 
+import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.helix.HelixEventHandler;
+import org.rs.refinex.log.LogSource;
+import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.value.ExportFunction;
@@ -11,6 +14,7 @@ import org.rs.refinex.value.Varargs;
 public class ClientEvents {
     @ExportFunction
     public static void SubscribeRemote(Environment environment, String event, Function callback) {
+        RefineX.logger.log(LogType.WARNING, "OUTDATED API USAGE: 'Events.SubscribeRemote()' might no longer exist", environment.currentSource());
         environment.addEventHandler(
                 new HelixEventHandler(
                         environment,
@@ -24,6 +28,7 @@ public class ClientEvents {
 
     @ExportFunction
     public static void Subscribe(Environment environment, String event, Function callback) {
+        RefineX.logger.log(LogType.WARNING, "OUTDATED API USAGE: 'Events.Subscribe()' might no longer exist", environment.currentSource());
         environment.addEventHandler(
                 new HelixEventHandler(
                         environment,
@@ -37,12 +42,14 @@ public class ClientEvents {
 
     @ExportFunction
     public static void Call(Environment environment, String event, Varargs args) {
+        RefineX.logger.log(LogType.WARNING, "OUTDATED API USAGE: 'Events.Call()' might no longer exist", environment.currentSource());
         new ContextEvent(environment.currentSource(), event, environment, environment.getSimulator(), args)
                 .dispatch(false);
     }
 
     @ExportFunction
     public static void CallRemote(Environment environment, String event, Varargs args) {
+        RefineX.logger.log(LogType.WARNING, "OUTDATED API USAGE: 'Events.CallRemote()' might no longer exist", environment.currentSource());
         Simulator server = environment.getSimulator().getSimulation().getSimulator("SERVER")[0];
         new ContextEvent(environment.currentSource(), event, environment, server, args)
                 .dispatch(false);

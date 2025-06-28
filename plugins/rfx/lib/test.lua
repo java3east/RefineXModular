@@ -98,5 +98,11 @@ function Test.new(name, fun)
 end
 
 function Test:run()
-    self.passed = self:fun()
+    local o, r = pcall(function ()
+        self.passed = self:fun()
+    end)
+    if not o then
+        RFX_ERROR("Test.run: " .. (self.name or "Unnamed Test") .. " failed with error: " .. tostring(r))
+        self.passed = false
+    end
 end

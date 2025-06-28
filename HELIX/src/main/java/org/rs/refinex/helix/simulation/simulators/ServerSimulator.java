@@ -3,10 +3,9 @@ package org.rs.refinex.helix.simulation.simulators;
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
+import org.rs.refinex.helix.namespaces.SERVER;
+import org.rs.refinex.helix.obj.*;
 import org.rs.refinex.helix.obj.Package;
-import org.rs.refinex.helix.obj.Player;
-import org.rs.refinex.helix.obj.Server;
-import org.rs.refinex.helix.obj.ServerEvents;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
@@ -27,10 +26,11 @@ public class ServerSimulator extends Simulator {
 
     @Override
     protected void addNamespaces(@NotNull Environment environment) {
-        environment.addStaticFunctionInterface("Player", Player.class);
         environment.addStaticFunctionInterface("Package", Package.class);
         environment.addStaticFunctionInterface("Events", ServerEvents.class);
         environment.addStaticFunctionInterface("Server", Server.class);
+        environment.addStaticFunctionInterface("HPlayer", HPlayer.class);
+        environment.addNamespace(new SERVER());
     }
 
     @Override

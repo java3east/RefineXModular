@@ -34,8 +34,8 @@ public class ResourceManager {
      */
     public Resource load(String path) {
         List<String> resourcePaths = List.of(
-                path, FileUtils.currentDirectory().getPath() + path,
-                FileUtils.jarDirectory().getPath() + path
+                path, FileUtils.currentDirectory().getPath() + "/" + path,
+                FileUtils.jarDirectory().getPath() + "/" + path
         );
 
         String manifestName = simulation.getContext().manifestName();

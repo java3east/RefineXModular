@@ -219,6 +219,13 @@ public abstract class ValueMapper<T> {
     public final @NotNull Object[] match(final @NotNull Object[] in, final @NotNull Class<?>[] clazz, Environment environment, boolean ignoreObject) {
         Object[] out = new Object[clazz.length - (ignoreObject ? 1 : 0)];
         for (int i = ignoreObject ? 1 : 0; i < clazz.length; i++) {
+            if (i >= in.length) {
+                if (clazz[i].isAssignableFrom(Varargs.class))
+                    out[i - (ignoreObject ? 1 : 0)] = Varargs.of();
+                else
+                    out[i - (ignoreObject ? 1 : 0)] = null;
+                continue;
+            }
             T value = (T) in[i];
             Class<?> targetClass = clazz[i];
             if (Varargs.class.isAssignableFrom(targetClass)) {

@@ -35,6 +35,11 @@ public class LuaNamespace extends Namespace {
 
     @Native
     public static Varargs RFXREF(Environment environment, Long referenceId, Varargs varargs) {
-        return environment.getFunctionReference(referenceId).invoke(varargs);
+        try {
+            return environment.getFunctionReference(referenceId).invoke(varargs);
+        } catch(Exception e) {
+            RefineX.logger.log(LogType.ERROR, "Failed to invoke function reference: " + referenceId + " (" + e.getMessage() + ")", environment.currentSource());
+            return Varargs.of();
+        }
     }
 }

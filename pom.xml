@@ -15,6 +15,7 @@
         <module>RefineX</module>
         <module>HELIX</module>
         <module>TOML</module>
+        <module>JSON</module>
     </modules>
 
     <properties>

@@ -31,7 +31,7 @@ public class HELIX extends Context {
 
     @Override
     public @NotNull String manifestName() {
-        return "Package.toml";
+        return "package.json";
     }
 
     @Override
