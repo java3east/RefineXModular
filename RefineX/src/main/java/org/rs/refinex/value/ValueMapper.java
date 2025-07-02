@@ -5,10 +5,7 @@ import org.rs.refinex.guid.FunctionReference;
 import org.rs.refinex.guid.GUID;
 import org.rs.refinex.scripting.Environment;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**

@@ -6,4 +6,6 @@ import java.lang.annotation.Target;
 
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ExportFunction { }
+public @interface ExportFunction {
+    boolean isMetaFunction() default false;
+}

@@ -48,9 +48,20 @@ public interface Environment {
      */
     void addNamespace(final @NotNull Namespace namespace);
 
+    void callSrcFunction(final @NotNull String name, Object... args);
+
     default void addStaticFunctionInterface(String name, final @NotNull Class<?> clazz) {
         Object val = getLanguage().getValueMapper().staticFunctionInterface(clazz, this);
         set(name, val, true);
+    }
+
+    default void setMeta(String objName, final @NotNull Class<?> metaClass) {
+        Object val = getLanguage().getValueMapper().staticFunctionInterface(metaClass, this);
+        Object o = getGlobal(objName);
+        if (o == null) {
+            throw new RuntimeException("No object found for name " + objName);
+        }
+        this.callSrcFunction("setmetatable", o, val);
     }
 
     /**

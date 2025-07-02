@@ -56,6 +56,11 @@ public class JsonEnvironment implements Environment {
     public void addNamespace(@NotNull Namespace namespace) { }
 
     @Override
+    public void callSrcFunction(@NotNull String name, Object... args) {
+
+    }
+
+    @Override
     public void load(@NotNull String str) {
         JSONObject json = new JSONObject(str);
         Map<String, Object> map = json.toMap();

@@ -56,6 +56,11 @@ public class TomlEnvironment implements Environment {
     public void addNamespace(@NotNull Namespace namespace) { }
 
     @Override
+    public void callSrcFunction(@NotNull String name, Object... args) {
+
+    }
+
+    @Override
     public void load(@NotNull String str) {
         Map<String, Object> toml = new Toml().read(str).toMap();
         for (Map.Entry<String, Object> entry : toml.entrySet()) {

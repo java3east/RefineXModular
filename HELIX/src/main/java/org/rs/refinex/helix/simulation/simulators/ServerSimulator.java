@@ -30,7 +30,9 @@ public class ServerSimulator extends Simulator {
         environment.addStaticFunctionInterface("Events", ServerEvents.class);
         environment.addStaticFunctionInterface("Server", Server.class);
         environment.addStaticFunctionInterface("HPlayer", HPlayer.class);
+        environment.addStaticFunctionInterface("Vector", Vector.class);
         environment.addNamespace(new SERVER());
+        environment.setMeta("Vector", Vector.class);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.rs.refinex.value;
 import org.rs.refinex.scripting.Environment;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class MethodMappedFunction implements Function {
     private final Object o;
@@ -19,8 +20,9 @@ public class MethodMappedFunction implements Function {
         try {
             return method.invoke(o, args);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to invoke function '" + method.getName() + "': " + e.getMessage(), e);
+            String givenAndExpected = "Given: " + Arrays.toString(Arrays.stream(args).map(Object::getClass).map(Object::toString).toArray());
+            givenAndExpected += ", Expected: " + Arrays.toString(method.getParameterTypes());
+            throw new RuntimeException("Failed to invoke function '" + method.getName() + "': " + e.getMessage() + " " + givenAndExpected, e);
         }
     }
 

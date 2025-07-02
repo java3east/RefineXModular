@@ -6,6 +6,7 @@ import org.rs.refinex.guid.GUID;
 import org.rs.refinex.helix.obj.ClientEvents;
 import org.rs.refinex.helix.obj.HPlayer;
 import org.rs.refinex.helix.obj.Package;
+import org.rs.refinex.helix.obj.Vector;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
@@ -33,6 +34,8 @@ public class ClientSimulator extends Simulator {
     protected void addNamespaces(@NotNull Environment environment) {
         environment.addStaticFunctionInterface("Events", ClientEvents.class);
         environment.addStaticFunctionInterface("Package", Package.class);
+        environment.addStaticFunctionInterface("Vector", Vector.class);
+        environment.setMeta("Vector", Vector.class);
     }
 
     @Override

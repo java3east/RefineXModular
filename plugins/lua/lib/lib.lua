@@ -29,18 +29,31 @@ function __ref(val, static)
         return val
     end
     local o = {}
+    local mt = {}
     for k, v in pairs(val) do
         if k == "__RFXREF__" then
             return function(a, ...)
+                local parameters = { ... }
+                table.insert(parameters, 1, a)
+                return PARENT_CALL("RFXREF", v, table.unpack(parameters))
+            end, false
+        elseif k == "__RFXREFMT__" then
+            return function(a, ...)
                 local parameters = { a, ... }
                 return PARENT_CALL("RFXREF", v, table.unpack(parameters))
-            end
+            end, true
         end
         if type(v) == 'table' then
-            o[k] = __ref(v, o)
+            local obj, forMetatable = __ref(v, static)
+            if not forMetatable then
+                o[k] = obj
+            else
+                mt[k] = obj
+            end
         else
             o[k] = v
         end
     end
+    setmetatable(o, mt)
     return o
 end

@@ -1,9 +1,7 @@
 package org.rs.refinex.lua;
 
 import org.jetbrains.annotations.NotNull;
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
@@ -77,6 +75,16 @@ public class LuaEnvironment implements Environment {
     @Override
     public void addNamespace(@NotNull Namespace namespace) {
         this.namespaces.add(namespace);
+    }
+
+    @Override
+    public void callSrcFunction(@NotNull String name, Object... args) {
+        LuaValue[] values = new LuaValue[args.length];
+        for (int i = 0; i < args.length; i++) {
+            values[i] = new LuaValueMapper().unmap(args[i], this);
+        }
+        LuaFunction function = globals.get(name).checkfunction();
+        Varargs result = function.invoke(LuaValue.varargsOf(values));
     }
 
     @Override
