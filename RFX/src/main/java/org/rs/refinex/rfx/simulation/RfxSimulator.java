@@ -34,6 +34,7 @@ public class RfxSimulator extends Manifest {
         environment.addNamespace(new SIMULATOR());
         environment.addNamespace(new RESOURCE());
         environment.addNamespace(new RFX());
+        environment.addNamespace(new DEPLOY());
         environment.addNamespace(new ENVIRONMENT());
         environment.loadfile(FileUtils.jarDirectory() + "/plugins/rfx/lib/test.lua");
         environment.loadfile(FileUtils.jarDirectory() + "/plugins/rfx/lib/color.lua");

@@ -10,7 +10,17 @@ import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.Varargs;
 
+/**
+ * Native Global functions that should be available to all server side scripts.
+ */
 public class SERVER extends Namespace {
+    /**
+     * Registers a server event handler that can be triggered by client scripts.
+     *
+     * @param environment The scripting environment.
+     * @param event      The name of the event to register.
+     * @param callback   The function to call when the event is triggered.
+     */
     @Native
     public static void RegisterServerEvent(Environment environment, String event, Function callback) {
         environment.addEventHandler(
@@ -24,6 +34,13 @@ public class SERVER extends Namespace {
         );
     }
 
+    /**
+     * Triggers a client event for a specific player.
+     * @param environment The scripting environment.
+     * @param event The name of the event to trigger.
+     * @param clientId The ID of the client to trigger the event for.
+     * @param varargs The arguments to pass to the event handler.
+     */
     @Native
     public static void TriggerClientEvent(Environment environment, String event, long clientId, Varargs varargs) {
         GUID guid = new GUID();

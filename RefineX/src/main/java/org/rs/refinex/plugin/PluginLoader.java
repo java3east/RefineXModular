@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -22,6 +24,7 @@ import java.util.Scanner;
  * @author Florian B.
  */
 public class PluginLoader {
+    private static final List<URLClassLoader> pluginClassLoaders = new ArrayList<>();
     private static String read(final File file) {
         StringBuilder sb = new StringBuilder();
         try (Scanner scanner = new Scanner(file)) {
@@ -56,13 +59,17 @@ public class PluginLoader {
 
             URL jarUrl = jarFile.toURI().toURL();
             URLClassLoader loader = new URLClassLoader(new URL[]{jarUrl}, RefineX.class.getClassLoader());
+            
+            // Keep the class loader alive for the duration of the application
+            pluginClassLoaders.add(loader);
 
             File pluginTxt = new File(FileUtils.jarDirectory() + "/plugins/" + name + "/plugin.txt");
             String path = read(pluginTxt).trim();
 
             Class<?> loadedClass = loader.loadClass(path);
 
-            loader.close();
+            // Don't close the loader here - we need it to remain available
+            // loader.close();
 
             Method method = loadedClass.getMethod("onLoad");
             Plugin plugin = (Plugin) loadedClass.getDeclaredConstructor().newInstance();
@@ -98,5 +105,19 @@ public class PluginLoader {
             RefineX.logger.log(LogType.WARNING, "Plugins directory not found: " + pluginsDir.getAbsolutePath(), LogSource.here());
         }
         return loaded;
+    }
+
+    /**
+     * Closes all plugin class loaders. This should be called on application shutdown.
+     */
+    public static void closeAllPluginClassLoaders() {
+        for (URLClassLoader loader : pluginClassLoaders) {
+            try {
+                loader.close();
+            } catch (Exception e) {
+                RefineX.logger.log(LogType.WARNING, "Failed to close plugin class loader: " + e.getMessage(), LogSource.here());
+            }
+        }
+        pluginClassLoaders.clear();
     }
 }
