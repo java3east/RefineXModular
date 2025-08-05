@@ -5,12 +5,10 @@ import org.luaj.vm2.Varargs;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.event.NativeCallEvent;
-import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * CallFunction is a Lua function that allows calling Java methods from Lua.

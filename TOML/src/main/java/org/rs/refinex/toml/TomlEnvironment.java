@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
-import org.rs.refinex.context.Manifest;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.language.LanguageManager;
 import org.rs.refinex.log.LogSource;
@@ -61,6 +60,7 @@ public class TomlEnvironment implements Environment {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load(@NotNull String str) {
         Map<String, Object> toml = new Toml().read(str).toMap();
         for (Map.Entry<String, Object> entry : toml.entrySet()) {
@@ -76,6 +76,7 @@ public class TomlEnvironment implements Environment {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void loadfile(@NotNull String path) {
         File file = new File(path);
         if (!file.exists()) {

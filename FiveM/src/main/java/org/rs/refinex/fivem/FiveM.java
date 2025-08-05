@@ -10,8 +10,6 @@ import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.SimulatorManager;
 
-import java.util.logging.Level;
-
 /**
  * Represents the FiveM context for the RefineX simulation program.
  */

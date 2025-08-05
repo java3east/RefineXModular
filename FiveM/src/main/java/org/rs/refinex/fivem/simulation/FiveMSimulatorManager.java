@@ -1,10 +1,7 @@
 package org.rs.refinex.fivem.simulation;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.RefineX;
 import org.rs.refinex.language.LanguageManager;
-import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;

@@ -84,7 +84,7 @@ public class LuaEnvironment implements Environment {
             values[i] = new LuaValueMapper().unmap(args[i], this);
         }
         LuaFunction function = globals.get(name).checkfunction();
-        Varargs result = function.invoke(LuaValue.varargsOf(values));
+        function.invoke(LuaValue.varargsOf(values));
     }
 
     @Override

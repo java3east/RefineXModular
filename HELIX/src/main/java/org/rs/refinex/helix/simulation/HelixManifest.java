@@ -1,17 +1,11 @@
 package org.rs.refinex.helix.simulation;
 
-import org.jetbrains.annotations.Debug;
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.RefineX;
 import org.rs.refinex.context.Manifest;
-import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.LimitList;
-
-import java.util.List;
 
 public class HelixManifest extends Manifest {
     /**

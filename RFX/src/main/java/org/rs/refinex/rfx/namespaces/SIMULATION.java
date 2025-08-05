@@ -1,6 +1,5 @@
 package org.rs.refinex.rfx.namespaces;
 
-import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextManager;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.context.Native;

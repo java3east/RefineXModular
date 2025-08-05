@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
 
 public class Cache<T> {
     private final Map<String, T> cache = new HashMap<>();

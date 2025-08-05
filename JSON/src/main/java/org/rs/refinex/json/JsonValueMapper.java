@@ -55,6 +55,7 @@ public class JsonValueMapper extends ValueMapper<Object> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public ObjectMapper<Map<String, Object>> getMapMapper() {
         return (value, env) -> (Map<String, Object>) value;
     }

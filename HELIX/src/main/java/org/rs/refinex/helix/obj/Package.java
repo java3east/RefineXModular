@@ -1,7 +1,6 @@
 package org.rs.refinex.helix.obj;
 
 import org.rs.refinex.RefineX;
-import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.value.Any;

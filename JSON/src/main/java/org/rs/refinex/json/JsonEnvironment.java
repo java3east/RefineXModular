@@ -17,7 +17,6 @@ import org.rs.refinex.util.FileUtils;
 import org.rs.refinex.value.Function;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +60,7 @@ public class JsonEnvironment implements Environment {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void load(@NotNull String str) {
         JSONObject json = new JSONObject(str);
         Map<String, Object> map = json.toMap();
@@ -77,6 +77,7 @@ public class JsonEnvironment implements Environment {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void loadfile(@NotNull String path) {
         File file = new File(path);
         if (!file.exists()) {

@@ -1,12 +1,9 @@
 package org.rs.refinex.fivem.namespaces;
 
-import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.Namespace;
 import org.rs.refinex.context.Native;
 import org.rs.refinex.fivem.FiveMEventHandler;
-import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.Varargs;
@@ -39,6 +36,7 @@ public class CFX extends Namespace {
     }
 
     @Native
+    @SuppressWarnings("unchecked")
     public static void CREATE_EXPORT(Environment environment, String name, Function function) {
         Optional<Object> exports = environment.getSimulator().getData("exports_" + environment.getResource().getName());
         if (exports.isEmpty() || !(exports.get() instanceof Map)) {
@@ -50,6 +48,7 @@ public class CFX extends Namespace {
     }
 
     @Native
+    @SuppressWarnings("unchecked")
     public static Function GET_EXPORT(Environment environment, String name, String fnName) {
         Optional<Object> exports = environment.getSimulator().getData("exports_" + name);
         if (exports.isEmpty() || !(exports.get() instanceof Map)) {

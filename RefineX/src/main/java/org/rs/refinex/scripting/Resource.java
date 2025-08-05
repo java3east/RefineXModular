@@ -1,11 +1,8 @@
 package org.rs.refinex.scripting;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.RefineX;
 import org.rs.refinex.context.Manifest;
 import org.rs.refinex.language.LanguageManager;
-import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.util.Cache;

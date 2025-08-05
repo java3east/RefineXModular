@@ -40,6 +40,7 @@ public abstract class ValueMapper<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public Object staticFunctionInterface(final @NotNull Class<?> clazz, Environment environment) {
         try {
             Map<String, T> map = new HashMap<>();
@@ -61,6 +62,7 @@ public abstract class ValueMapper<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private @NotNull Object objUnmap(final @NotNull Object object, Environment environment) {
         if (this.clazz.isAssignableFrom(object.getClass())) {
             return object;
@@ -193,6 +195,7 @@ public abstract class ValueMapper<T> {
      * @param object the object to map
      * @return the mapped object
      */
+    @SuppressWarnings("unchecked")
     public final @NotNull T unmap(@NotNull Object object, final @NotNull Environment environment) {
         if (object instanceof Varargs v) object = unmapVarargs(v, environment);
         if (this.clazz.isAssignableFrom(object.getClass())) return (T) object;
@@ -213,6 +216,7 @@ public abstract class ValueMapper<T> {
         return t;
     }
 
+    @SuppressWarnings("unchecked")
     public final @NotNull Object[] match(final @NotNull Object[] in, final @NotNull Class<?>[] clazz, Environment environment, boolean ignoreObject) {
         Object[] out = new Object[clazz.length - (ignoreObject ? 1 : 0)];
         for (int i = ignoreObject ? 1 : 0; i < clazz.length; i++) {

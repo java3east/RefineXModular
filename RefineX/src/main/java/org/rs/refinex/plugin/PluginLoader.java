@@ -62,6 +62,8 @@ public class PluginLoader {
 
             Class<?> loadedClass = loader.loadClass(path);
 
+            loader.close();
+
             Method method = loadedClass.getMethod("onLoad");
             Plugin plugin = (Plugin) loadedClass.getDeclaredConstructor().newInstance();
             method.invoke(plugin);

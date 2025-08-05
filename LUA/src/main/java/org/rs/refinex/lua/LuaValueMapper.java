@@ -167,6 +167,7 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
     @Override
     public ObjectMapper<LuaValue> getMapUnmapper() {
         return (value, env) -> {
+            @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) value;
             LuaTable tbl = new LuaTable();
             for (Map.Entry<String, Object> entry : map.entrySet()) {

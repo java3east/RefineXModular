@@ -5,8 +5,6 @@ import org.rs.refinex.log.LogSource;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.value.Function;
 
-import java.util.HashMap;
-
 public abstract class ContextEventHandler {
     private final @NotNull String name;
     protected final @NotNull Function function;

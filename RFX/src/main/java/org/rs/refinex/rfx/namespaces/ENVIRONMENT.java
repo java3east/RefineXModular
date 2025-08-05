@@ -6,9 +6,6 @@ import org.rs.refinex.guid.GUID;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulator;
-import org.rs.refinex.value.Varargs;
-
-import java.util.Optional;
 
 public class ENVIRONMENT extends Namespace {
     @Native

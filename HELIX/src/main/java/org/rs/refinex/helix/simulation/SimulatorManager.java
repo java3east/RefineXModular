@@ -23,6 +23,7 @@ public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void startResource(@NotNull Simulator simulator, @NotNull Resource resource) {
         List<String> files = new ArrayList<>();
         for (Object o : (List<String>) resource.get("shared")[0]) {

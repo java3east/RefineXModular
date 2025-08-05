@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.context.ContextEventHandler;
 import org.rs.refinex.context.Namespace;
-import org.rs.refinex.guid.GUID;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.plugin.Language;
 import org.rs.refinex.simulation.Simulator;

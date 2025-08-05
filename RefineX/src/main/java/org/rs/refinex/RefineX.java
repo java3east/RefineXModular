@@ -1,12 +1,8 @@
 package org.rs.refinex;
 
 import org.rs.refinex.context.ContextManager;
-import org.rs.refinex.context.Native;
-import org.rs.refinex.event.EventHandler;
 import org.rs.refinex.event.EventManager;
-import org.rs.refinex.event.NativeCallEvent;
 import org.rs.refinex.language.LanguageManager;
-import org.rs.refinex.log.LogEntry;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.log.Logger;
@@ -20,10 +16,7 @@ import org.rs.refinex.simulation.Simulator;
 import org.rs.refinex.util.FileUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.Optional;
-import java.util.Scanner;
 
 /**
  * RefineX is a plugin-based framework designed to run and test LUA scripts for various games.
@@ -35,23 +28,6 @@ import java.util.Scanner;
 public class RefineX {
     public static final Logger logger = new Logger();
     public static final EventManager manager = new EventManager();
-
-    private static String read(File file) {
-        try {
-            Scanner scanner = new Scanner(file);
-            StringBuilder sb = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                sb.append(scanner.nextLine()).append("\n");
-            }
-            return sb.toString();
-        } catch (FileNotFoundException e) {
-            logger.log(LogType.ERROR, "File not found: " + file.getAbsolutePath(), LogSource.here());
-            return "";
-        } catch (Exception e) {
-            logger.log(LogType.ERROR, "Error reading file: " + file.getAbsolutePath() + " - " + e.getMessage(), LogSource.here());
-            return "";
-        }
-    }
 
     public static void main(String[] args) {
         logger.log(LogType.INFO, "RefineX starting...", LogSource.here());

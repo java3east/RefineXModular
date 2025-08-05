@@ -2,7 +2,6 @@ package org.rs.refinex.helix.obj;
 
 import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
-import org.rs.refinex.guid.GUID;
 import org.rs.refinex.helix.HelixEventHandler;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;

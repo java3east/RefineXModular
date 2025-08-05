@@ -1,13 +1,11 @@
 package org.rs.refinex.helix.simulation.simulators;
 
 import org.jetbrains.annotations.NotNull;
-import org.rs.refinex.RefineX;
 import org.rs.refinex.context.ContextEvent;
 import org.rs.refinex.helix.namespaces.SERVER;
 import org.rs.refinex.helix.obj.*;
 import org.rs.refinex.helix.obj.Package;
 import org.rs.refinex.log.LogSource;
-import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
 import org.rs.refinex.scripting.Resource;
 import org.rs.refinex.simulation.Simulation;
