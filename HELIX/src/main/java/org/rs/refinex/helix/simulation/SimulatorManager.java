@@ -25,15 +25,16 @@ public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager
     @Override
     @SuppressWarnings("unchecked")
     protected void startResource(@NotNull Simulator simulator, @NotNull Resource resource) {
-        List<String> files = new ArrayList<>();
+        Set<String> fileSet = new LinkedHashSet<>();
         for (Object o : (List<String>) resource.get("shared")[0]) {
-            files.addAll(resource.getFiles(o.toString()));
-            files.addAll(resource.getFiles(o.toString().replace("**/", "")));
+            fileSet.addAll(resource.getFiles(o.toString()));
+            fileSet.addAll(resource.getFiles(o.toString().replace("**/", "")));
         }
         for (Object o : (List<String>) resource.get(simulator.getType().equals("SERVER") ? "server" : "client")[0]) {
-            files.addAll(resource.getFiles(o.toString()));
-            files.addAll(resource.getFiles(o.toString().replace("**/", "")));
+            fileSet.addAll(resource.getFiles(o.toString()));
+            fileSet.addAll(resource.getFiles(o.toString().replace("**/", "")));
         }
+        List<String> files = new ArrayList<>(fileSet);
         HashMap<Language, List<String>> languages = new HashMap<>();
         for (String file : files) {
             Optional<Language> language = LanguageManager.getByExtension(FileUtils.getExtension(file));
@@ -45,7 +46,7 @@ public class SimulatorManager extends org.rs.refinex.simulation.SimulatorManager
         }
         for (Language language : languages.keySet()) {
             Environment environment = simulator.createEnvironment(language.getName() + "_" + resource.getName(), language, resource);
-            for (String file : files) {
+            for (String file : languages.get(language)) {
                 environment.loadfile(file);
             }
         }

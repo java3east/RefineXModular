@@ -16,6 +16,7 @@
         <module>HELIX</module>
         <module>TOML</module>
         <module>JSON</module>
+        <module>Database</module>
     </modules>
 
     <properties>

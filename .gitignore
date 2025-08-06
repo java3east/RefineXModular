@@ -43,6 +43,3 @@ build/
 /Refx/pom.xml
 /Refx/src/main/java/org/rs/refinex/refx/RefxSimulator.java
 /runner.lua
-
-
-*.jar

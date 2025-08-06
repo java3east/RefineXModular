@@ -250,6 +250,8 @@ public abstract class ValueMapper<T> {
         return match(in, clazz, environment, true);
     }
 
+    public abstract List<Any> baseTypes(Varargs varargs);
+
     public abstract boolean isNull(final @NotNull T object);
 
     public abstract ObjectMapper<Integer> getIntegerMapper();

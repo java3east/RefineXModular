@@ -2,11 +2,14 @@ package org.rs.refinex.toml;
 
 import org.jetbrains.annotations.NotNull;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.value.Any;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
 import org.rs.refinex.value.ValueMapper;
 import org.rs.refinex.value.Varargs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TomlValueMapper extends ValueMapper<Object> {
@@ -118,5 +121,14 @@ public class TomlValueMapper extends ValueMapper<Object> {
     @Override
     public ObjectMapper<Object> getFunctionUnmapper() {
         return (value, env) -> value;
+    }
+
+    @Override
+    public List<Any> baseTypes(Varargs varargs) {
+        List<Any> baseTypes = new ArrayList<>();
+        for (Object arg : varargs.values()) {
+            baseTypes.add(new Any(arg));
+        }
+        return baseTypes;
     }
 }

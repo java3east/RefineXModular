@@ -29,6 +29,7 @@ public class ServerSimulator extends Simulator {
         environment.addStaticFunctionInterface("Server", Server.class);
         environment.addStaticFunctionInterface("HPlayer", HPlayer.class);
         environment.addStaticFunctionInterface("Vector", Vector.class);
+        environment.addStaticFunctionInterface("Database", Database.class);
         environment.addNamespace(new SERVER());
         environment.setMeta("Vector", Vector.class);
     }

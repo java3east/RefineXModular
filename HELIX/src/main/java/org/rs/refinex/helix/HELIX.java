@@ -6,9 +6,11 @@ import org.rs.refinex.helix.simulation.HelixManifest;
 import org.rs.refinex.helix.simulation.simulators.ClientSimulator;
 import org.rs.refinex.helix.simulation.simulators.ServerSimulator;
 import org.rs.refinex.plugin.Context;
+import org.rs.refinex.plugin.RefineXPlugin;
 import org.rs.refinex.simulation.Simulation;
 import org.rs.refinex.simulation.SimulatorManager;
 
+@RefineXPlugin
 public class HELIX extends Context {
     public HELIX() {
         super("HELIX");

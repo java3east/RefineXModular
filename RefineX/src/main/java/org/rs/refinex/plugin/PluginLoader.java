@@ -43,22 +43,20 @@ public class PluginLoader {
      */
     public static void load(final String name) {
         try {
-            // search for a jar file
+            // search for all jar files in the plugin directory
             File dir = new File(FileUtils.jarDirectory() + "/plugins/" + name);
-            File jarFile = null;
+            List<URL> jarUrls = new ArrayList<>();
             for (File jar : Objects.requireNonNull(dir.listFiles())) {
                 if (jar.getName().endsWith(".jar")) {
-                    jarFile = jar;
-                    break;
+                    jarUrls.add(jar.toURI().toURL());
                 }
             }
-            if (jarFile == null) {
+            if (jarUrls.isEmpty()) {
                 RefineX.logger.log(LogType.WARNING, "Plugin " + name + " not found", LogSource.here());
                 return;
             }
 
-            URL jarUrl = jarFile.toURI().toURL();
-            URLClassLoader loader = new URLClassLoader(new URL[]{jarUrl}, RefineX.class.getClassLoader());
+            URLClassLoader loader = new URLClassLoader(jarUrls.toArray(new URL[0]), RefineX.class.getClassLoader());
             
             // Keep the class loader alive for the duration of the application
             pluginClassLoaders.add(loader);
@@ -76,6 +74,7 @@ public class PluginLoader {
             method.invoke(plugin);
         } catch(Exception e) {
             RefineX.logger.log(LogType.ERROR, "Failed to load plugin " + name + ": " + e.getMessage(), LogSource.here());
+            e.printStackTrace();
         }
     }
 

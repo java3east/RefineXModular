@@ -6,11 +6,14 @@ import org.rs.refinex.RefineX;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.value.Any;
 import org.rs.refinex.value.Function;
 import org.rs.refinex.value.ObjectMapper;
 import org.rs.refinex.value.ValueMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -204,5 +207,71 @@ public class LuaValueMapper extends ValueMapper<LuaValue> {
                 }
             };
         };
+    }
+
+    @Override
+    public List<Any> baseTypes(org.rs.refinex.value.Varargs varargs) {
+        List<Any> baseTypes = new ArrayList<>();
+        for (Object arg : varargs.values()) {
+            baseTypes.add(new Any(baseType((LuaValue) arg)));
+        }
+        return baseTypes;
+    }
+
+    private Object baseType(LuaValue object) {
+        if (object instanceof LuaFunction) {
+            return new Function() {
+                @Override
+                public org.rs.refinex.value.Varargs invoke(org.rs.refinex.value.Varargs args) {
+                    Varargs luaArgs = unmap(args, null);
+                    Varargs results = ((LuaFunction) object).invoke(luaArgs);
+                    return getVarargsMapper().map(results, null);
+                }
+            };
+        } else if (object instanceof LuaTable) {
+            Map<String, Any> map = new HashMap<>();
+            LuaTable table = (LuaTable) object;
+            boolean isArray = true;
+            Any[] arr = new Any[table.length()];
+            int index = 0;
+            for (LuaValue key : table.keys()) {
+                if (!key.isint() && !key.islong()) {
+                    isArray = false;
+                    break;
+                }
+                LuaValue value = table.get(key);
+                arr[index++] = new Any(baseType(value));
+            }
+
+            if (isArray) {
+                return arr;
+            }
+
+            for (LuaValue key : table.keys()) {
+                LuaValue value = table.get(key);
+                LuaString keyStr = key.checkstring();
+                if (keyStr == null) {
+                    RefineX.logger.log(LogType.WARNING, "LuaTable key is not a string", LogSource.here());
+                    continue;
+                }
+                map.put(keyStr.checkjstring(), new Any(baseType(value)));
+            }
+
+            return map;
+        } else if (object.isnil()) {
+            return null;
+        } else if (object.isint()) {
+            return object.checkint();
+        } else if (object.islong()) {
+            return object.checklong();
+        } else if (object.isnumber()) {
+            return object.checkdouble();
+        } else if (object.isboolean()) {
+            return object.checkboolean();
+        } else if (object.isstring()) {
+            return object.checkjstring();
+        }
+
+        throw new IllegalArgumentException("LuaType " + object.getClass().getSimpleName() + " is not supported for baseType mapping.");
     }
 }
