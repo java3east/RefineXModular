@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -71,7 +70,11 @@ public class SimpleDatabase implements AutoCloseable {
             while (resultSet.next()) {
                 HashMap<String, Object> row = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnName(i), resultSet.getObject(i));
+                    String columnName = metaData.getColumnName(i);
+                    Object value = resultSet.getObject(i);
+                    if (value instanceof Timestamp)
+                        value = value.toString();
+                    row.put(columnName, value);
                 }
                 results.add(row);
             }

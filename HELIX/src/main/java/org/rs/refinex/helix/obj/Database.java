@@ -7,6 +7,7 @@ import org.rs.refinex.RefineX;
 import org.rs.refinex.log.LogSource;
 import org.rs.refinex.log.LogType;
 import org.rs.refinex.scripting.Environment;
+import org.rs.refinex.util.Timer;
 import org.rs.refinex.value.Any;
 import org.rs.refinex.value.ExportFunction;
 import org.rs.refinex.value.Referencable;
@@ -28,6 +29,7 @@ public class Database extends Referencable {
 
     @ExportFunction
     public static boolean Execute(final Environment environment, final String sql, final Varargs parameters) {
+        Timer timer = new Timer();
         List<Any> args = environment.getLanguage().getValueMapper().baseTypes(parameters);
         Any[] argsArr = (Any[]) args.get(0).o();
         Object[] argsObj = new Object[argsArr.length];
@@ -44,12 +46,16 @@ public class Database extends Referencable {
             RefineX.logger.log(LogType.ERROR, "Database not found for path: " + path, LogSource.here());
             return false;
         }
-        return database.execute(sql, argsObj);
+        boolean success = database.execute(sql, argsObj);
+        long ms = timer.millis();
+        RefineX.logger.log(LogType.INFO, "Executed SQL '" + sql + "' (took " + ms + "ms)", LogSource.here());
+        return success;
     }
 
     @ExportFunction
     public static HelixDatabaseResult.Row[] Select(final Environment environment, final String sql, final Varargs parameters) {
-                List<Any> args = environment.getLanguage().getValueMapper().baseTypes(parameters);
+        Timer timer = new Timer();
+        List<Any> args = environment.getLanguage().getValueMapper().baseTypes(parameters);
         Any[] argsArr = (Any[]) args.get(0).o();
         Object[] argsObj = new Object[argsArr.length];
         for (int i = 0; i < argsArr.length; i++) {
@@ -72,6 +78,8 @@ public class Database extends Referencable {
         for (HashMap<String, Object> row : results) {
             rows[i++] = new HelixDatabaseResult.Row(row);
         }
+        long ms = timer.millis();
+        RefineX.logger.log(LogType.INFO, "Executed SQL '" + sql + "' (took " + ms + "ms)", LogSource.here());
         return rows;
     }
 }
